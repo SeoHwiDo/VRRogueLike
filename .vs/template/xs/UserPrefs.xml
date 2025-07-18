@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{5BCFAF61-91E4-183A-D81D-FAD8567847BE}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MapCreator.cs">
+    <Files>
+      <File FileName="Assets/Scripts/DroneCtrl.cs" Line="55" Column="56" />
+      <File FileName="Assets/Scripts/start.cs" />
+      <File FileName="Assets/Scripts/BulletCtrl.cs" />
+      <File FileName="Assets/Scripts/MapCreator.cs" Line="195" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="template" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="DroneCtrl.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="26583203-4703-4e97-a7ff-103d3d319c9b" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
