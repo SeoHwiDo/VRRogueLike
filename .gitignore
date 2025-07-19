@@ -1,3 +1,8 @@
-﻿.vs/VRRougeLike/CopilotIndices
-.vs
-Temp
+﻿
+.vs/
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+MemoryCaptures/
