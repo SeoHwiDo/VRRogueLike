@@ -48,7 +48,7 @@ public class GunFire : MonoBehaviour
         //스킬 사용을 위한 홀드 게이지 값
         click_delay = 0;
 
-        mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
+        //mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
         audioSource = this.GetComponent<AudioSource>();
         bulletMax = 25;
         //총알 재장전 시간
