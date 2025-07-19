@@ -22,6 +22,19 @@ public class GameManager : MonoBehaviour
     public int droneKill = 0;
     public bool isGameOver = false;
 
+    private IEnumerator InitGameSequence()
+    {
+        yield return StartCoroutine(MapManager.Instance.PreloadMapPrefabs(() =>
+        {
+            MapManager.Instance.GenerateMap();
+            player.transform.position = MapManager.Instance.GetPlayerStartPosition();
+        }));
+
+        yield return StartCoroutine(EnemySpawnManager.Instance.PreloadEnemyPrefabs(() =>
+        {
+            StartCoroutine(EnemySpawnManager.Instance.Spawn());
+        }));
+    }
     void Awake()
     {
 
@@ -35,10 +48,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         MapManager.Instance.SetMapConfig(6, 12); //맵 수정 필요한 경우
-        StartCoroutine(MapManager.Instance.PreloadPrefabs(() =>
-        {
-            MapManager.Instance.GenerateMap(); // ✅ 이제 안전하게 실행
-        }));
+        StartCoroutine(InitGameSequence());
+
     }
     void Update()
     {
@@ -46,6 +57,7 @@ public class GameManager : MonoBehaviour
         {
             MapManager.Instance.refreshMap();
         }
+        
     }
     public void EnterSelectSkill()
     {
