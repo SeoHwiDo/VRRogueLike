@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 54973724142598288}
   - component: {fileID: 5779771765140595396}
   m_Layer: 0
-  m_Name: drone02
+  m_Name: Drone_02
   m_TagString: drone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,6 +70,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 333229612792214386}
     m_Modifications:
+    - target: {fileID: 1085810214478664, guid: 2623fcc4ae72bed4681324fdc889e468, type: 3}
+      propertyPath: m_TagString
+      value: drone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510965450385496, guid: 2623fcc4ae72bed4681324fdc889e468, type: 3}
+      propertyPath: m_TagString
+      value: drone
+      objectReference: {fileID: 0}
     - target: {fileID: 1685845671507644, guid: 2623fcc4ae72bed4681324fdc889e468, type: 3}
       propertyPath: m_Name
       value: Robot_Scout_HyperX
@@ -122,20 +130,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1510965450385496, guid: 2623fcc4ae72bed4681324fdc889e468, type: 3}
-      propertyPath: m_TagString
-      value: drone
-      objectReference: {fileID: 0}
-    - target: {fileID: 1085810214478664, guid: 2623fcc4ae72bed4681324fdc889e468, type: 3}
-      propertyPath: m_TagString
-      value: drone
-      objectReference: {fileID: 0}
-    - target: {fileID: 64856508888091972, guid: 2623fcc4ae72bed4681324fdc889e468,
+    - target: {fileID: 64118127417307940, guid: 2623fcc4ae72bed4681324fdc889e468,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 64118127417307940, guid: 2623fcc4ae72bed4681324fdc889e468,
+    - target: {fileID: 64856508888091972, guid: 2623fcc4ae72bed4681324fdc889e468,
         type: 3}
       propertyPath: m_Enabled
       value: 0
