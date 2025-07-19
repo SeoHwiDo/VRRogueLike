@@ -17,28 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 4386cec888f2ea849a668925d07421fa
   m_SerializeEntries:
-  - m_GUID: b13e45f0bd988634c9106081786af780
-    m_Address: Assets/Prefabs/Map/generator.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: e9e63dd3873171849a3b8db4686e3370
     m_Address: map_wall
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
-  - m_GUID: cad46b447f4c7344db6f10d7e02c456d
-    m_Address: Assets/Prefabs/Map/BaseMap.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 3e74e1453aa57f04f80f1cd298cdb8e6
     m_Address: map_tile_01
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
-  - m_GUID: 5c86a2e53ec80144b8dd2db3429832f8
-    m_Address: Assets/Prefabs/Map/Capacitor.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 606508a750df9e048877db88747b715a
     m_Address: DroneSpawnPoint
     m_ReadOnly: 0
@@ -57,32 +45,40 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
-  - m_GUID: c510d168143febf4ba4bfbc542d4622a
-    m_Address: Assets/Prefabs/Map/Battery_medium.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 71068399cd6422445b8f800b2c22ceea
-    m_Address: Assets/Prefabs/Map/table_2.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 225b068d6218b7647b370b06adfd399d
     m_Address: map_tile_03
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
-  - m_GUID: 38972edd1ba885e47a44430b494f5b46
-    m_Address: Assets/Prefabs/Map/room_in.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6b567a0f85e728d47954e8045033d47b
-    m_Address: Assets/Prefabs/Map/Battery.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 6ac9ed3f802d3084490d5c43d3091a8f
     m_Address: map_tile_02
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
+  - m_GUID: 758043a040001ef4ea659df66dc7f03d
+    m_Address: PlayerPrefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b2352fb70016a8542adfc37a626363ec
+    m_Address: Drone_02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d63282e774904234baa2748a3981d2a2
+    m_Address: Drone_04
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 01a028bae9374e545b2405663e51dac3
+    m_Address: Drone_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5423e47b7a1dd5641860a39ca7509c46
+    m_Address: Drone_03
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2be6dc851bf09934f949232acced76f3
+    m_Address: Drone_Move
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:
