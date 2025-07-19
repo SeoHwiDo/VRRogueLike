@@ -101,8 +101,12 @@ public class MapManager : MonoBehaviour
             Debug.LogError("Room prefab failed to load: " + handle.Status);
         }
     }
-    private void SetInstance(GameObject instance,  string nameSuffix = "", string poolName=null)
+    private void SetInstance(GameObject instance, Vector3 localPoistion, Quaternion localRotation, Transform parent, string nameSuffix = "", string poolName=null)
     {
+        instance.transform.SetParent(parent, false);
+        instance.transform.localPosition = localPoistion;
+        instance.transform.localRotation = localRotation;
+        
         instance.name = instance.name.Replace("(Clone)", nameSuffix);
         if (poolName!=null)
         {
@@ -133,7 +137,7 @@ public class MapManager : MonoBehaviour
         {
             Direction corner = (Direction)i;
             var data = tileTransform[corner];
-            SetInstance(Instantiate(prefabCache["map_corner"], data.position * offset, data.rotation, map.transform), $"_{corner}");
+            SetInstance(Instantiate(prefabCache["map_corner"]), data.position * offset, data.rotation, map.transform, $"_{corner}");
         }
         //벽 타일 생성
         for (int i = 4; i < 8; i++)
@@ -150,15 +154,13 @@ public class MapManager : MonoBehaviour
                 bool isCenter = doorIdx == j;
                 string wallType = isCenter ? "map_door" : "map_wall";
                 Vector3 localPosition = new Vector3((j - (mapSize - 3) / 2f) * tileSize, 0, 0);
-                GameObject side_Map_Tile = Instantiate(prefabCache[wallType], localPosition, Quaternion.identity, sideWall.transform);
-                SetInstance(side_Map_Tile, $"_{side}");
+                GameObject side_Map_Tile = Instantiate(prefabCache[wallType]);
+                SetInstance(side_Map_Tile, localPosition, Quaternion.identity, sideWall.transform, $"_{side}");
                 //문 위치에 드론 스폰 지점
                 if (isCenter)
                 {
-                    GameObject SpawnPointInstance = Instantiate(prefabCache["DroneSpawnPoint"], side_Map_Tile.transform);
-                    SpawnPointInstance.transform.localPosition = Vector3.zero + Vector3.up * 3.65f;//setInstance 재 수정 필요
-                    SpawnPointInstance.transform.localRotation = Quaternion.identity;
-                    SetInstance(SpawnPointInstance, $"_{side}");
+                    GameObject SpawnPointInstance = Instantiate(prefabCache["DroneSpawnPoint"]);
+                    SetInstance(SpawnPointInstance, Vector3.zero + Vector3.up * 3.65f, Quaternion.Euler(0,180f,0), side_Map_Tile.transform, $"_{side}");
                     droneSpawnPoint[cnt] = SpawnPointInstance;
 
                 }
@@ -185,8 +187,8 @@ public class MapManager : MonoBehaviour
             {
                 mapTilePool[tileAdrr] = new List<GameObject>();
             }
-            GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr], mapInnerTransform[i], Quaternion.identity, map.transform);
-            SetInstance(inner_Map_Tile, $"_{i}",tileAdrr);
+            GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr]);
+            SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", tileAdrr);
         }
     }
     public void refreshMap()
@@ -214,8 +216,8 @@ public class MapManager : MonoBehaviour
             }
             else
             {
-                GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr], mapInnerTransform[i], Quaternion.identity, map.transform);
-                SetInstance(inner_Map_Tile, $"_{i}", tileAdrr);
+                GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr]);
+                SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", tileAdrr);
             }
         }
     }
