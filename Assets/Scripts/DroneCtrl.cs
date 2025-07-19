@@ -30,6 +30,10 @@ public class DroneCtrl : MonoBehaviour
     public bool hit_player, hpFlot = false, droneHPbarEnd=true;
     void Start()
     {
+        //GameObject droneSpawnPtc_inst = Instantiate(DroneSpawnPtc, droneSpawnPos, Quaternion.identity);
+        ////소환 효과음
+        //enemySpawns_inst.GetComponent<AudioSource>().volume = 0.8f;
+        //enemySpawns_inst.GetComponent<AudioSource>().PlayOneShot(droneSpawnSound);
         HP = 5;
         //해당 오브젝트의 오디오컴포넌트 호출
         audioSource=this.GetComponent<AudioSource>();
@@ -42,7 +46,7 @@ public class DroneCtrl : MonoBehaviour
         //식별하기 위한 플레이어 탐색 후 호출
         player = GameObject.Find("Player");
         //드론 생성 관리를 위한 시스템 오브젝트 호출
-        mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
+        //mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
         //부유모션을 위한 상하운동 반복
         StartCoroutine(DroneUpDown());
     }
