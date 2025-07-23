@@ -36,7 +36,7 @@ public class DroneCtrl : MonoBehaviour
         //enemySpawns_inst.GetComponent<AudioSource>().PlayOneShot(droneSpawnSound);
         HP = 5;
         //해당 오브젝트의 오디오컴포넌트 호출
-        audioSource=this.GetComponent<AudioSource>();
+        audioSource =this.GetComponent<AudioSource>();
         //오디오 반복 재생
         audioSource.loop=true;
         //호출한 오디오컴포넌트에 미리 설정한 드론 부유음 할당
@@ -44,7 +44,7 @@ public class DroneCtrl : MonoBehaviour
         //오디오 재생
         audioSource.Play();
         //식별하기 위한 플레이어 탐색 후 호출
-        player = GameObject.Find("Player");
+        player = GameManager.Instance.player;
         //드론 생성 관리를 위한 시스템 오브젝트 호출
         //mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
         //부유모션을 위한 상하운동 반복
@@ -74,18 +74,19 @@ public class DroneCtrl : MonoBehaviour
             //처치한 드론의 갯수 증가
             mapCreator.droneKill++;
             //사망 이펙트 및 사운드 재생
-            GameObject deadPtc_i = Instantiate(deadPtc, this.transform.parent.position, Quaternion.identity);
+            GameObject deadPtc_i = Instantiate(deadPtc, this.transform.position, Quaternion.identity);
             deadPtc_i.GetComponent<AudioSource>().PlayOneShot(droneDeadSound);
             //드론 제거
             Destroy(deadPtc_i, 1.0f);
-            Destroy(this.transform.parent.gameObject);
+            Destroy(this.transform.gameObject);
             //이펙트 제거
             
         }
-        if (!hit_player)//플레이어에 닿을때까지 플레이어 방향으로 이동
+        if (!hit_player && player!=null)//플레이어에 닿을때까지 플레이어 방향으로 이동
         {
-            this.transform.parent.LookAt(player.transform);
-            this.transform.parent.position += this.transform.parent.forward * moveSpeed * Time.deltaTime;
+
+            this.transform.LookAt(player.transform);
+            this.transform.position += this.transform.forward * moveSpeed * Time.deltaTime;
         }
     }
     //체력 감소 함수
@@ -109,11 +110,11 @@ public class DroneCtrl : MonoBehaviour
         //타이머를 통해 일정 시간마다 상하운동 반복
         timer += Time.deltaTime;
         if (goingUp){
-            transform.parent.position += transform.up * upDownSpeed * Time.deltaTime;
+            transform.position += transform.up * upDownSpeed * Time.deltaTime;
             if (timer>=moveTime) goingUp = false;
         }
         else{
-            transform.parent.position -= transform.up * upDownSpeed * Time.deltaTime;
+            transform.position -= transform.up * upDownSpeed * Time.deltaTime;
             if (timer >= moveTime * 2.0f){
                 goingUp = true;
                 timer = 0;
@@ -127,4 +128,26 @@ public class DroneCtrl : MonoBehaviour
              yield return null;  // 한 프레임 대기 (없으면 무한 루프 됨)
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.name + " Enter Trigger");
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Trigger is Player");
+            //처음 타격한 드론일떄 타격한 드론 배열에 추가
+            List<GameObject> atkPlayerEnemy = PlayerManager.Instance.getatkEnemy();
+            if (!atkPlayerEnemy.Contains(other.gameObject))
+            {
+                atkPlayerEnemy.Add(other.gameObject);
+                //진동 피드백
+                Handheld.Vibrate();
+                //체력 감소
+                //if (!gunFire.godMode) 
+                    HP--;
+            }
+            //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
+            moveSpeed = 0;
+        }
+    }
 }
+

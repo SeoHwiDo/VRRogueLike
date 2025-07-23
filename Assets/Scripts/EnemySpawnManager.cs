@@ -128,13 +128,13 @@ public class EnemySpawnManager : MonoBehaviour
         {
             reusable = Instantiate(prefabCache[rndEnemyKey], rndEnemySpawnPointPos, Quaternion.identity);
             enemyPool[rndEnemyKey].Add(reusable);
-            SetInstance(Instantiate(prefabCache["Drone_Move"]), Vector3.zero, Quaternion.identity, reusable.transform);
+            //SetInstance(Instantiate(prefabCache["Drone_Move"]), Vector3.zero, Quaternion.identity, reusable.transform);
         }
-        if (!prefabCache.ContainsKey("Drone_Move"))
-        {
-            Debug.LogError("DroneMove prefab not found!");
-            return;
-        }
+        //if (!prefabCache.ContainsKey("Drone_Move"))
+        //{
+        //    Debug.LogError("DroneMove prefab not found!");
+        //    return;
+        //}
         //드론 부유모션 및 관리를 위한 인스턴스
         
     }
