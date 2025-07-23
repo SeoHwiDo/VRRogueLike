@@ -53,10 +53,10 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            MapManager.Instance.refreshMap();
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    MapManager.Instance.refreshMap();
+        //}
         
     }
     public void EnterSelectSkill()
