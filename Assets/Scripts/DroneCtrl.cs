@@ -1,39 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 public class DroneCtrl : MonoBehaviour
 {
-    // Start is called before the first frame update
-    //드론 처치시 식별 파티클
-    public GameObject deadPtc;
-    //드론의 이동시 및 처치시 식별 오디오
-    public AudioClip droneMoveSound,droneDeadSound;
-    //드론의 이동 속도
-    public float moveSpeed;
-    //드론의 체력 바 이미지
-    public Image drHpbar;
-    //오디오 소스 관리
-    AudioSource audioSource;
-    //플레이어 
-    GameObject player;
-    //드론 생성 및 전반적인 게임 시스템 관리
-    MapCreator mapCreator;
+   
+    
 
-    //드론의 부유 모션을 위한 상하운동 속도
-    public float upDownSpeed = 1.0f, timer = 0, moveTime = 1.0f;
-    bool goingUp = true;
+    //오디오 소스 관리
+    
+    private AudioClip droneMoveSound;
+    private AudioClip droneDeadSound;
+    private AudioSource audioSource;
+
+    //드론의 체력 바 이미지
+    [SerializeField] private Image hpGauge;
+    [SerializeField]private Canvas enemyHP;
+
+    //드론 처치시 식별 파티클
+    private GameObject deadPtc;
+    private GameObject spawnPtc;
+
+    private GameObject player;
+    //드론의 이동 속도
+    private float moveSpeed =2.0f;
+    //드론의 부유 모션 파라미터
+    private float upDownSpeed = 1.0f;
+    private float timer = 0f;
+    private float moveTime = 1.0f;
     //드론의 기본 체력 설정
-    public float setHP = 5;
-    protected float HP;
+    private float setHP = 5, HP;
+
     //드론의 플레이어 타격 관리 및 게임 몰입도를 위한 체력바 표시 관리
-    public bool hit_player, hpFlot = false, droneHPbarEnd=true;
+    private bool hit_player = false;
+    private bool hpFlot = false;
+    private bool droneHPbarEnd = true;
+    private bool goingUp = true;
+    public void InitializePtc(GameObject _spawnPtc, GameObject _deadPtc)
+    {
+        spawnPtc = _spawnPtc;
+        deadPtc = _deadPtc;
+    }
+
     void Start()
     {
-        //GameObject droneSpawnPtc_inst = Instantiate(DroneSpawnPtc, droneSpawnPos, Quaternion.identity);
-        ////소환 효과음
-        //enemySpawns_inst.GetComponent<AudioSource>().volume = 0.8f;
-        //enemySpawns_inst.GetComponent<AudioSource>().PlayOneShot(droneSpawnSound);
+        player = GameManager.Instance.player;
+        droneMoveSound = Resources.Load<AudioClip>("Sounds/DroneMoveSound");
+        droneDeadSound = Resources.Load<AudioClip>("Sounds/droneDeadSound");
+
         HP = 5;
         //해당 오브젝트의 오디오컴포넌트 호출
         audioSource =this.GetComponent<AudioSource>();
@@ -43,10 +60,6 @@ public class DroneCtrl : MonoBehaviour
         audioSource.clip=droneMoveSound;
         //오디오 재생
         audioSource.Play();
-        //식별하기 위한 플레이어 탐색 후 호출
-        player = GameManager.Instance.player;
-        //드론 생성 관리를 위한 시스템 오브젝트 호출
-        //mapCreator = GameObject.Find("SpawnSpot").GetComponent<MapCreator>();
         //부유모션을 위한 상하운동 반복
         StartCoroutine(DroneUpDown());
     }
@@ -63,21 +76,21 @@ public class DroneCtrl : MonoBehaviour
         }
 
         //드론의 HP바를 전체 체력
-        drHpbar.fillAmount=HP/setHP;
+        hpGauge.fillAmount=HP/setHP;
 
         // Debug.Log(timer);
         //만약 드론의 체력이 모두 닳았을때
         if (HP <= 0)
         {
             //게임 시스템 관리 코드에서 전체 드론의 갯수 감소
-            mapCreator.droneNum--;
+            //mapCreator.droneNum--;
             //처치한 드론의 갯수 증가
-            mapCreator.droneKill++;
+            //mapCreator.droneKill++;
             //사망 이펙트 및 사운드 재생
-            GameObject deadPtc_i = Instantiate(deadPtc, this.transform.position, Quaternion.identity);
-            deadPtc_i.GetComponent<AudioSource>().PlayOneShot(droneDeadSound);
+            deadPtc.SetActive(true);
+            //deadPtc_i.GetComponent<AudioSource>().PlayOneShot(droneDeadSound);
             //드론 제거
-            Destroy(deadPtc_i, 1.0f);
+            //Destroy(deadPtc_i, 1.0f);
             Destroy(this.transform.gameObject);
             //이펙트 제거
             
@@ -130,10 +143,8 @@ public class DroneCtrl : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name + " Enter Trigger");
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Trigger is Player");
             //처음 타격한 드론일떄 타격한 드론 배열에 추가
             List<GameObject> atkPlayerEnemy = PlayerManager.Instance.getatkEnemy();
             if (!atkPlayerEnemy.Contains(other.gameObject))

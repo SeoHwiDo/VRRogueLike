@@ -3,7 +3,9 @@ guid: 76f06387dde9c4945b153af77bb6851f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - droneMoveSound: {fileID: 8300000, guid: e483a773e1b8c924e82e6ba189b556eb, type: 3}
+  - droneDeadSound: {fileID: 8300000, guid: 8b3f676fe7b41044495a2964396b8ba3, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

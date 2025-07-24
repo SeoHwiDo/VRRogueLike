@@ -38,7 +38,7 @@ public class BulletCtrl : MonoBehaviour
         //만약 타격한 물체의 태그가 drone일때,
         if(other.gameObject.CompareTag("drone")){
             //타격한 드론의 가장 아래차일드(MoveDrone)의 DroneCtrl컴포넌트 호출(실제 드론 생성시 가장 아래에 생성되게 구성됨)
-            DroneCtrl dronCtrl=other.transform.GetChild(other.transform.childCount-1).GetComponent<DroneCtrl>();
+            DroneCtrl dronCtrl=other.transform.GetComponent<DroneCtrl>();
             //타격되었을때 식별할 수 있도록 파티클 호출
             GameObject hit_ptc = Instantiate(hitParticle,this.transform.position,Quaternion.identity);
             //파티클 바로 제거
