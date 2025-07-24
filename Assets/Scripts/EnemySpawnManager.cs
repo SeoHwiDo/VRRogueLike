@@ -19,7 +19,8 @@ public class EnemySpawnManager : MonoBehaviour
     };
     private List<string> prefabKeys = new List<string>()
     {
-        "Drone_Move"
+        "EnemyDeadPtc",
+        "EnemySpawnPtc",
     };
 
     public IEnumerator PreloadEnemyPrefabs(System.Action onComplete = null)
@@ -101,13 +102,13 @@ public class EnemySpawnManager : MonoBehaviour
         GameObject[] SpawnPointList = MapManager.Instance.GetEnemySpawnPoint();
         if (SpawnPointList == null || SpawnPointList.Length != 4)
         {
-            Debug.LogError("❗ SpawnPointList is null or empty");
+            Debug.LogError("SpawnPointList is null or empty");
             return;
         }
         GameObject rndEnemySpawnPoint = SpawnPointList[Random.Range(0, SpawnPointList.Length)];
         if (rndEnemySpawnPoint == null)
         {
-            Debug.LogError("❗ Selected enemy spawn point is null");
+            Debug.LogError("Selected enemy spawn point is null");
             return;
         }
         Vector3 rndEnemySpawnPointPos = rndEnemySpawnPoint.transform.position + Vector3.down;
@@ -128,14 +129,18 @@ public class EnemySpawnManager : MonoBehaviour
         {
             reusable = Instantiate(prefabCache[rndEnemyKey], rndEnemySpawnPointPos, Quaternion.identity);
             enemyPool[rndEnemyKey].Add(reusable);
-            //SetInstance(Instantiate(prefabCache["Drone_Move"]), Vector3.zero, Quaternion.identity, reusable.transform);
+
+            var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
+            SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
+
+            var DeadPtc = Instantiate(prefabCache["EnemyDeadPtc"]);
+            SetInstance(DeadPtc, Vector3.zero, Quaternion.identity, reusable.transform);
+            DeadPtc.SetActive(false);
+
+            reusable.GetComponent<DroneCtrl>().InitializePtc(spawnPtc, DeadPtc);
+
+
+            
         }
-        //if (!prefabCache.ContainsKey("Drone_Move"))
-        //{
-        //    Debug.LogError("DroneMove prefab not found!");
-        //    return;
-        //}
-        //드론 부유모션 및 관리를 위한 인스턴스
-        
     }
 }

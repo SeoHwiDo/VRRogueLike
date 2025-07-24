@@ -47,7 +47,7 @@ public class BulletCtrl : MonoBehaviour
             dronCtrl.loseHP(gunFire.bulletDmg);
             //dronCtrl.HP-=gunFire.bulletDmg;
             //드론의 잔여 체력을 확인할 수 있도록 체력바 띄우기
-            dronCtrl.hpFlot=true;
+            //dronCtrl.hpFlot=true;
             //총알이 타격되었으므로 리소스 관리를위해 바로 제거
             Destroy(this.gameObject);
         }

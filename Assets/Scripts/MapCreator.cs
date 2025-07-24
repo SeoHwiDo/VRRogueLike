@@ -270,7 +270,7 @@ public class MapCreator : MonoBehaviour{
         //드론 설정 스크립트
         droneCtrl=droneMove_inst.GetComponent<DroneCtrl>();
         //난이도에 따른 드론 이동속도 변경
-        droneCtrl.moveSpeed=moveSpeed;
+        //droneCtrl.moveSpeed=moveSpeed;
     }
     //드론으로부터 타격받을때
     private void OnTriggerEnter(Collider other) {
@@ -285,7 +285,7 @@ public class MapCreator : MonoBehaviour{
                 if(!gunFire.godMode) HP--;
             }
             //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
-            other.gameObject.transform.GetChild(other.gameObject.transform.childCount-1).GetComponent<DroneCtrl>().moveSpeed=0;
+            //other.gameObject.transform.GetChild(other.gameObject.transform.childCount-1).GetComponent<DroneCtrl>().moveSpeed=0;
         }
     }
 }
