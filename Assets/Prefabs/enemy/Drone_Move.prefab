@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4318772931727132004}
   - component: {fileID: 82756586772695424}
   m_Layer: 0
-  m_Name: moveDrone
+  m_Name: Drone_Move
   m_TagString: drone_ctrl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,17 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f06387dde9c4945b153af77bb6851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadPtc: {fileID: 8779782149406324045, guid: c681867400497e54d83434a5efac2bad, type: 3}
-  droneMoveSound: {fileID: 8300000, guid: e483a773e1b8c924e82e6ba189b556eb, type: 3}
-  droneDeadSound: {fileID: 8300000, guid: 8b3f676fe7b41044495a2964396b8ba3, type: 3}
-  moveSpeed: 2
-  drHpbar: {fileID: 6223979900998151450}
-  upDownSpeed: 1
-  yOffset: 0.5
-  setHP: 5
-  hit_player: 0
-  hpFlot: 0
-  droneHPbarEnd: 1
+  hpGauge: {fileID: 0}
+  EnemyHP: {fileID: 0}
 --- !u!82 &82756586772695424
 AudioSource:
   m_ObjectHideFlags: 0
@@ -66,7 +57,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e483a773e1b8c924e82e6ba189b556eb, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
