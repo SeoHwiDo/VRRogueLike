@@ -15,13 +15,31 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Game State")]
-    public int level = 1;
-    public int maxLevel = 4;
-    public float HP = 10;
-    public int droneNum;
-    public int droneKill = 0;
-    public bool isGameOver = false;
+    private int level = 1;
+    private int maxLevel = 4;
+    private float HP = 10;
+    private int enemyCount=0;
+    private int killEnemyCount = 0;
+    private bool isGameOver = false;
 
+    public int GetEnemyCount()
+    {
+        return enemyCount;
+    }
+    public float GetPlayerHP()
+    {
+        return HP;
+    }
+    public void addEnemyCount(int num=1)
+    {
+        enemyCount += num;
+    }
+    public void DeadEnemy()
+    {
+        enemyCount -= 1;
+        killEnemyCount += 1;
+
+    }
     private IEnumerator InitGameSequence()
     {
         yield return StartCoroutine(MapManager.Instance.PreloadMapPrefabs(() =>
@@ -30,9 +48,9 @@ public class GameManager : MonoBehaviour
             player.transform.position = MapManager.Instance.GetPlayerStartPosition();
         }));
 
-        yield return StartCoroutine(EnemySpawnManager.Instance.PreloadEnemyPrefabs(() =>
+        yield return StartCoroutine(EnemyManager.Instance.PreloadEnemyPrefabs(() =>
         {
-            StartCoroutine(EnemySpawnManager.Instance.Spawn());
+            StartCoroutine(EnemyManager.Instance.Spawn());
         }));
     }
     void Awake()

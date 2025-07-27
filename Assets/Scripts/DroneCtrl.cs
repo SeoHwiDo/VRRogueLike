@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,18 +11,20 @@ public class DroneCtrl : MonoBehaviour
     
 
     //오디오 소스 관리
-    
     private AudioClip droneMoveSound;
-    private AudioClip droneDeadSound;
+    //private AudioClip droneDeadSound;
     private AudioSource audioSource;
 
-    //드론의 체력 바 이미지
+    //드론의 체력 바 
     [SerializeField] private Image hpGauge;
     [SerializeField]private Canvas enemyHP;
+    private Coroutine hpHideCoroutine;
 
-    //드론 처치시 식별 파티클
+    //드론 파티클
     private GameObject deadPtc;
     private GameObject spawnPtc;
+    private List<GameObject> hitPtcPool=new List<GameObject>();
+
 
     private GameObject player;
     //드론의 이동 속도
@@ -32,26 +34,32 @@ public class DroneCtrl : MonoBehaviour
     private float timer = 0f;
     private float moveTime = 1.0f;
     //드론의 기본 체력 설정
-    private float setHP = 5, HP;
+    private float maxHP = 5f;
+    private float HP;
 
     //드론의 플레이어 타격 관리 및 게임 몰입도를 위한 체력바 표시 관리
     private bool hit_player = false;
     private bool hpFlot = false;
     private bool droneHPbarEnd = true;
     private bool goingUp = true;
-    public void InitializePtc(GameObject _spawnPtc, GameObject _deadPtc)
+    //public void InitializePtc(GameObject _spawnPtc, GameObject _deadPtc)
+    //{
+    //    spawnPtc = _spawnPtc;
+    //    deadPtc = _deadPtc;
+    //}
+    private void OnDead()
     {
-        spawnPtc = _spawnPtc;
-        deadPtc = _deadPtc;
+        GameManager.Instance.DeadEnemy();
+        EnemyManager.Instance.InstanceEnemyDeadPtc(this.transform.position);
+        this.gameObject.SetActive(false);
     }
-
     void Start()
     {
         player = GameManager.Instance.player;
         droneMoveSound = Resources.Load<AudioClip>("Sounds/DroneMoveSound");
-        droneDeadSound = Resources.Load<AudioClip>("Sounds/droneDeadSound");
+        //droneDeadSound = Resources.Load<AudioClip>("Sounds/droneDeadSound");
 
-        HP = 5;
+        HP = maxHP;
         //해당 오브젝트의 오디오컴포넌트 호출
         audioSource =this.GetComponent<AudioSource>();
         //오디오 반복 재생
@@ -67,33 +75,10 @@ public class DroneCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        //hp바가 안떠있고, HP바 플로팅 시간이 다 지났을때
-        if(hpFlot&&droneHPbarEnd){
-            //플로팅시간 체크를 false로 변경
-            droneHPbarEnd =false;
-            //hp바 시간을 비동기로 처리
-            StartCoroutine(DroneHPbar());
-        }
-
-        //드론의 HP바를 전체 체력
-        hpGauge.fillAmount=HP/setHP;
-
-        // Debug.Log(timer);
         //만약 드론의 체력이 모두 닳았을때
         if (HP <= 0)
         {
-            //게임 시스템 관리 코드에서 전체 드론의 갯수 감소
-            //mapCreator.droneNum--;
-            //처치한 드론의 갯수 증가
-            //mapCreator.droneKill++;
-            //사망 이펙트 및 사운드 재생
-            deadPtc.SetActive(true);
-            //deadPtc_i.GetComponent<AudioSource>().PlayOneShot(droneDeadSound);
-            //드론 제거
-            //Destroy(deadPtc_i, 1.0f);
-            Destroy(this.transform.gameObject);
-            //이펙트 제거
-            
+            OnDead();
         }
         if (!hit_player && player!=null)//플레이어에 닿을때까지 플레이어 방향으로 이동
         {
@@ -105,19 +90,25 @@ public class DroneCtrl : MonoBehaviour
     //체력 감소 함수
     public void loseHP(float dmg){
         this.HP -= dmg;
+        hpGauge.fillAmount = HP / maxHP;
     }
 
-    IEnumerator DroneHPbar(){
+    private void ShowHPBar(){
         //코루틴 실행시 체력바 플로팅
-        this.transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSeconds(3.0f);
-        this.transform.GetChild(0).gameObject.SetActive(false);
-        //hp바 수명이 끝났으므로 false;
-        hpFlot = false;
-        //위와 같은 이유로 true;
-        droneHPbarEnd = true;
+        Debug.Log("start ShowHPBar");
+        enemyHP.enabled = true;
+        if (hpHideCoroutine != null)
+        {
+            StopCoroutine(hpHideCoroutine);
+        }
+        hpHideCoroutine = StartCoroutine(HideHPBar());
     }
-
+    private IEnumerator HideHPBar()
+    {
+        yield return new WaitForSeconds(3f);
+        enemyHP.enabled = false;
+        hpHideCoroutine = null; // 끝난 후 null로 초기화
+    }
     void MoveUpdown()
     {
         //타이머를 통해 일정 시간마다 상하운동 반복
@@ -141,6 +132,29 @@ public class DroneCtrl : MonoBehaviour
              yield return null;  // 한 프레임 대기 (없으면 무한 루프 됨)
         }
     }
+    
+    private void InstanceHitPtc(Vector3 hitPos)
+    {
+        GameObject reusable = hitPtcPool.Find(t => t != null && !t.activeInHierarchy);
+        if (reusable != null)
+        {   
+            reusable.transform.position = hitPos;
+            reusable.SetActive(true);
+        }
+        else
+        {
+            Addressables.InstantiateAsync("HitPtc").Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    var it = handle.Result;
+                    it.transform.SetParent(this.transform, false);
+                    it.transform.position = hitPos;
+                    hitPtcPool.Add(it);
+                }
+            };
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -158,6 +172,13 @@ public class DroneCtrl : MonoBehaviour
             }
             //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
             moveSpeed = 0;
+        }
+        if (other.gameObject.CompareTag("bullet"))
+        {
+            Debug.Log("hit "+other.gameObject.name);
+            InstanceHitPtc(other.gameObject.transform.position);
+            ShowHPBar();
+            loseHP(1);
         }
     }
 }
