@@ -91,6 +91,10 @@ MonoBehaviour:
     m_Address: EnemySpawnPtc
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 0ed3aa0ad0ea90d4c8bc8240d451b1ce
+    m_Address: HitPtc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:
