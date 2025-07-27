@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateStatusUI(float hp, float skillCooldown)
     {
-        hpInspector.fillAmount = hp / GameManager.Instance.HP;
+        hpInspector.fillAmount = hp / GameManager.Instance.GetPlayerHP();
         skillInspector.fillAmount = skillCooldown;
     }
     public void UpdateStatUI(int level, int enemyCount)

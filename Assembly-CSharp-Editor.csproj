@@ -352,6 +352,9 @@
  <Reference Include="UnityEditor.WindowsStandalone.Extensions">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.36f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="PackageManagerAssembly">
+ <HintPath>C:/Project/VRRougeLike/Assets/AssetStore/Effects/Editor/PackageManagerAssembly/PackageManagerAssembly.dll</HintPath>
+ </Reference>
  <Reference Include="Google.ProtocolBuffers">
  <HintPath>C:/Project/VRRougeLike/Assets/GoogleVR/Plugins/Google.ProtocolBuffers.dll</HintPath>
  </Reference>
@@ -366,9 +369,6 @@
  </Reference>
  <Reference Include="Unity.Analytics.Tracker">
  <HintPath>C:/Project/VRRougeLike/Library/PackageCache/com.unity.analytics@3.2.3/Editor/Unity.Analytics.Tracker.dll</HintPath>
- </Reference>
- <Reference Include="PackageManagerAssembly">
- <HintPath>C:/Project/VRRougeLike/Assets/AssetStore/Effects/Editor/PackageManagerAssembly/PackageManagerAssembly.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.36f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
