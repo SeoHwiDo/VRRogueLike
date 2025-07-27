@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 555927409}
   - component: {fileID: 555927408}
   m_Layer: 0
-  m_Name: EnemySpawnManger
+  m_Name: EnemyManger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 555927407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f681c38b9b7c7fa49b1a9fc4df714471, type: 3}
+  m_Script: {fileID: 11500000, guid: 4018c07a86ee8d943a21a91417b97bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &555927409
@@ -445,12 +445,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1705104434}
   endUI: {fileID: 318586396}
-  level: 1
-  maxLevel: 4
-  HP: 10
-  droneNum: 0
-  droneKill: 0
-  isGameOver: 0
 --- !u!4 &799308657
 Transform:
   m_ObjectHideFlags: 0

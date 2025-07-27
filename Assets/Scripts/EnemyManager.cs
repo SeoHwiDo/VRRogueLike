@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class EnemySpawnManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
     //addressable로부터 preload한 프리팹 관리
-    public static EnemySpawnManager Instance { get; private set; }
+    public static EnemyManager Instance { get; private set; }
     private Dictionary<string,GameObject> prefabCache=new Dictionary<string,GameObject>();
     private List<string> droneKeys = new List<string>()
     {
@@ -22,7 +22,28 @@ public class EnemySpawnManager : MonoBehaviour
         "EnemyDeadPtc",
         "EnemySpawnPtc",
     };
-
+    private List<GameObject> deadPtcPool = new List<GameObject>();
+    public void InstanceEnemyDeadPtc(Vector3 pos)
+    {
+        GameObject reusable = deadPtcPool.Find(t => t != null && !t.activeInHierarchy);
+        if (reusable != null)
+        {
+            reusable.transform.position = pos;
+            reusable.SetActive(true);
+        }
+        else
+        {
+            Addressables.InstantiateAsync("HitPtc").Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    var it = handle.Result;
+                    it.transform.position = pos;
+                    deadPtcPool.Add(it);
+                }
+            };
+        }
+}
     public IEnumerator PreloadEnemyPrefabs(System.Action onComplete = null)
     {
         var keysToLoad = droneKeys
@@ -133,11 +154,9 @@ public class EnemySpawnManager : MonoBehaviour
             var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
             SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
 
-            var DeadPtc = Instantiate(prefabCache["EnemyDeadPtc"]);
-            SetInstance(DeadPtc, Vector3.zero, Quaternion.identity, reusable.transform);
-            DeadPtc.SetActive(false);
 
-            reusable.GetComponent<DroneCtrl>().InitializePtc(spawnPtc, DeadPtc);
+
+            //reusable.GetComponent<DroneCtrl>().InitializePtc(spawnPtc);
 
 
             
