@@ -10,7 +10,7 @@ public class GunFire : MonoBehaviour
     public int bulletMax,moreHP;
     public float reLoadTime, bulletDmg;
 
-    public Image HPgaugeImage,reLoadGaugeImage,skillGauge;
+    //public Image HPgaugeImage,reLoadGaugeImage,skillGauge;
 
     public Text bullet_text,caution_text;
 
@@ -99,9 +99,9 @@ public class GunFire : MonoBehaviour
 
 
         //스킬 게이지는 클릭 홀드 시간만큼 채움
-        //skillGauge.fillAmount=click_delay;
+        UIManager.Instance.UpdateSkillUI(click_delay);
         //총알 재장전 게이지는 총알 재장전시간에 맞게 표시
-        reLoadGaugeImage.fillAmount = reLoadDelay;
+        //reLoadGaugeImage.fillAmount = reLoadDelay;
         //만약 총알을 다 사용할 시, 재장전 시간만큼 표시(전체를 채우는데 재사용대기시간만큼 걸릴 수 있도록)
         if (bulletNum <= 0) reLoadDelay += 1.0f / reLoadTime * Time.deltaTime;
         //만약 재장전 시간이 1초이상일때
@@ -289,15 +289,15 @@ void BulletFire(Vector3 pos,Quaternion rot){
         } 
 
     }
-    IEnumerator GodMode(){
-        Color currentcolor=HPgaugeImage.color;
-        godMode=true;
-        HPgaugeImage.color=Color.yellow;
-        yield return new WaitForSeconds(5.0f);
-        HPgaugeImage.color=currentcolor;
-        godMode=false;
+    //IEnumerator GodMode(){
+    //    Color currentcolor=HPgaugeImage.color;
+    //    godMode=true;
+    //    HPgaugeImage.color=Color.yellow;
+    //    yield return new WaitForSeconds(5.0f);
+    //    HPgaugeImage.color=currentcolor;
+    //    godMode=false;
  
-    }
+    //}
     IEnumerator BulletInfinite(){
         bulletInfinite=true;
         yield return new WaitForSeconds(5.0f);

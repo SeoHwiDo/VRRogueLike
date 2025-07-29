@@ -10,14 +10,10 @@ public class GameManager : MonoBehaviour
     [Header("Player")]
     public GameObject player;
 
-    [Header("UI")]
-    public GameObject endUI;
-
-
     [Header("Game State")]
     private int level = 1;
     private int maxLevel = 4;
-    private float HP = 10;
+    
     private int enemyCount=0;
     private int killEnemyCount = 0;
     private bool isGameOver = false;
@@ -26,11 +22,11 @@ public class GameManager : MonoBehaviour
     {
         return enemyCount;
     }
-    public float GetPlayerHP()
+    public int GetkillEnemyCount()
     {
-        return HP;
+        return killEnemyCount;
     }
-    public void addEnemyCount(int num=1)
+    public void AddEnemyCount(int num=1)
     {
         enemyCount += num;
     }
