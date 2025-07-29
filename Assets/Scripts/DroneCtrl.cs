@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -164,11 +165,13 @@ public class DroneCtrl : MonoBehaviour
             if (!atkPlayerEnemy.Contains(other.gameObject))
             {
                 atkPlayerEnemy.Add(other.gameObject);
+                PlayerManager.Instance.LosePlayerHP(1f);
+                UIManager.Instance.UpdateHPUI(PlayerManager.Instance.GetPlayerHP());
                 //진동 피드백
                 Handheld.Vibrate();
                 //체력 감소
                 //if (!gunFire.godMode) 
-                    HP--;
+                
             }
             //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
             moveSpeed = 0;

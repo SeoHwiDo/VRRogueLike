@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.TouchScreenKeyboard;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,10 +22,13 @@ public class UIManager : MonoBehaviour
 
     [Header("Result UI")]
     [SerializeField] private TMP_Text resultText;
-    [SerializeField] private GameObject gameOverUI;
 
     [Header("System UI")]
     [SerializeField] private TMP_Text CautionText;
+
+    [SerializeField] private GameObject inGameUI;
+    [SerializeField] private GameObject gameOverUI;
+
     public static UIManager Instance { get; private set; }
 
     private void Awake()
@@ -33,6 +37,23 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    //public void ShowStartUI()
+    //{
+    //    startUI?.SetActive(true);
+    //    inGameUI?.SetActive(false);
+    //}
+
+    public void ShowInGameUI()
+    {
+        //startUI?.SetActive(false);
+        inGameUI?.SetActive(true);
+    }
+
+    public void HideAllUI()
+    {
+        //startUI?.SetActive(false);
+        inGameUI?.SetActive(false);
+    }
     public void UpdateCursorUI(bool SkillSelect)
     {
         if (SkillSelect)
@@ -46,10 +67,13 @@ public class UIManager : MonoBehaviour
             bulletCursor.gameObject.SetActive(true);
         }
     }
-    public void UpdateStatusUI(float hp, float skillCooldown)
+    public void UpdateHPUI(float hp)
     {
-        hpInspector.fillAmount = hp / GameManager.Instance.GetPlayerHP();
-        skillInspector.fillAmount = skillCooldown;
+        hpInspector.fillAmount = hp / PlayerManager.Instance.GetPlayerMaxHP();
+    }
+    public void UpdateSkillUI(float skill)
+    {
+        skillInspector.fillAmount = skill;
     }
     public void UpdateStatUI(int level, int enemyCount)
     {
@@ -60,7 +84,7 @@ public class UIManager : MonoBehaviour
     public void ShowGameOverUI(bool isWin)
     {
         gameOverUI.SetActive(true);
-        resultText.text = isWin ? "You Win!" : "Game Over!";
+        resultText.text = GameManager.Instance.GetkillEnemyCount().ToString();
     }
     public void ShowCautionText(string message)
     {

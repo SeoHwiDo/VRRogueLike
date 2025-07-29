@@ -8,6 +8,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private InputManager _inputManager;
     [SerializeField] private CtrlManager _ctrlManager;
     private List<GameObject> atkEnemy = new List<GameObject>();
+    private float MaxHP = 10;
+    private float HP = 10;
 
     void Awake()
     {
@@ -18,6 +20,18 @@ public class PlayerManager : MonoBehaviour
             Instance = this;
 
         DontDestroyOnLoad(gameObject); // 필요 시
+    }
+    public float GetPlayerMaxHP()
+    {
+        return MaxHP;
+    }
+    public float GetPlayerHP()
+    {
+        return HP;
+    }
+    public void LosePlayerHP(float dmg)
+    {
+        HP -= dmg;
     }
     public List<GameObject> getatkEnemy()
     {
