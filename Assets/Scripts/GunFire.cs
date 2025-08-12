@@ -33,7 +33,6 @@ public class GunFire : MonoBehaviour
     public List<GameObject> skill_icon_prefab = new List<GameObject>();
 
     AudioSource audioSource;
-    MapCreator mapCreator;
     float click_delay = 0, reLoadDelay = 0, bulletNum, bulletSize;
     int bulletDoubleShot=0;
     bool skill_icon_bool,skill_reload,skill_reload_ON;
@@ -228,7 +227,6 @@ public class GunFire : MonoBehaviour
                     //스킬 선택을 위해 비활성화 했던 적 타격 콜라이더를 다시 활성화
                     GameObject.Find("SpawnSpot").GetComponent<BoxCollider>().enabled=true;
                     //플레이어 위치 재설정
-                    StartCoroutine(mapCreator.Spawn());
                 }
             }
         }
