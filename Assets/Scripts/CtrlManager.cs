@@ -21,4 +21,19 @@ public class CtrlManager : MonoBehaviour
         if (playerBody != null)
             playerBody.Rotate(Vector3.up * yawDelta);
     }
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    void Update()
+    {
+
+        Vector2 lookDelta = InputManager.Instance.GetLookAxis();
+
+        if (lookDelta != Vector2.zero)
+        {
+            Look(lookDelta);
+        }
+    }
 }
