@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     [Header("Stat UI")]
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text enemyCountText;
+    [SerializeField] private TMP_Text BulletText;
+
+
 
     [Header("Result UI")]
     [SerializeField] private TMP_Text resultText;
@@ -79,6 +82,10 @@ public class UIManager : MonoBehaviour
     {
         levelText.text = "Level: " + level;
         enemyCountText.text = "Enemies: " + enemyCount;
+    }
+    public void UpdateBulletUI(int max,int cnt)
+    {
+
     }
 
     public void ShowGameOverUI(bool isWin)
