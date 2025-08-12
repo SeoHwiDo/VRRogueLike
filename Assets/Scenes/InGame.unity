@@ -172,6 +172,18 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &343236350 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8244592329105815769, guid: 12eef755df016b142bf8eb3669cea348,
+    type: 3}
+  m_PrefabInstance: {fileID: 969200270}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &453905675 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8244592328638636677, guid: 12eef755df016b142bf8eb3669cea348,
@@ -240,6 +252,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 826690128525431845, guid: 758043a040001ef4ea659df66dc7f03d,
+        type: 3}
+      propertyPath: mouseSensitivity
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3310138381757715280, guid: 758043a040001ef4ea659df66dc7f03d,
         type: 3}
       propertyPath: m_Constraints
@@ -309,7 +326,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _inputManager
       value: 
-      objectReference: {fileID: 1596712796}
+      objectReference: {fileID: 0}
     - target: {fileID: 3310138381757715284, guid: 758043a040001ef4ea659df66dc7f03d,
         type: 3}
       propertyPath: _ctrlManager
@@ -365,6 +382,23 @@ PrefabInstance:
       propertyPath: reLoadGaugeImage
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3310138382013745756, guid: 758043a040001ef4ea659df66dc7f03d,
+        type: 3}
+      propertyPath: fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6dd7024f00606b44eb5884197a66a893, type: 3}
+    - target: {fileID: 3310138382013745756, guid: 758043a040001ef4ea659df66dc7f03d,
+        type: 3}
+      propertyPath: particle
+      value: 
+      objectReference: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1,
+        type: 3}
+    - target: {fileID: 3310138382013745756, guid: 758043a040001ef4ea659df66dc7f03d,
+        type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 2604385316405505180, guid: 6a647a536473cbf43accc92d36f36390,
+        type: 3}
     - target: {fileID: 3310138382013745761, guid: 758043a040001ef4ea659df66dc7f03d,
         type: 3}
       propertyPath: m_IsActive
@@ -899,43 +933,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d666b4522780b34190ecfbdc61d1eca, type: 3}
---- !u!114 &1596712796 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6914815208252521908, guid: 758043a040001ef4ea659df66dc7f03d,
-    type: 3}
-  m_PrefabInstance: {fileID: 581482923}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd8a884e1b68bf34e9d34184a7a2a9bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1705104434 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3310138381757715291, guid: 758043a040001ef4ea659df66dc7f03d,
     type: 3}
   m_PrefabInstance: {fileID: 581482923}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1705104435
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1705104434}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c48a3b6b5b0c19e4c97e461061071e80, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!65 &1705104442
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1131,6 +1134,7 @@ MonoBehaviour:
   skillInspector: {fileID: 342119049}
   levelText: {fileID: 642400061}
   enemyCountText: {fileID: 1983666200}
+  BulletText: {fileID: 343236350}
   resultText: {fileID: 1316887404}
   CautionText: {fileID: 1456081763}
   inGameUI: {fileID: 969200271}
