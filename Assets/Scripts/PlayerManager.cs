@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
    public static PlayerManager Instance { get; private set; }
-    [SerializeField] private InputManager _inputManager;
-    [SerializeField] private CtrlManager _ctrlManager;
     private List<GameObject> atkEnemy = new List<GameObject>();
     private float MaxHP = 10;
     private float HP = 10;
@@ -45,22 +43,6 @@ public class PlayerManager : MonoBehaviour
     {
         atkEnemy.Remove(enemyObj);
     }
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-    void Update()
-    {
-        if (_inputManager == null || _ctrlManager == null)
-            return;
 
-        Vector2 lookDelta = _inputManager.GetLookDelta();
-
-        if (lookDelta != Vector2.zero)
-        {
-            _ctrlManager.Look(lookDelta);
-        }
-    }
 
 }
