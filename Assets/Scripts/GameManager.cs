@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     [Header("Game State")]
     private int level = 1;
     private int maxLevel = 4;
-    
+    private float bulletSpeed = 5f;
+
     private int enemyCount=0;
     private int killEnemyCount = 0;
     private bool isGameOver = false;
@@ -35,6 +36,14 @@ public class GameManager : MonoBehaviour
         enemyCount -= 1;
         killEnemyCount += 1;
 
+    }
+    public float GetBulletSpeed()
+    {
+        return bulletSpeed;
+    }
+    public void SetBulletSpeed(float speed)
+    {
+        bulletSpeed = speed;
     }
     private IEnumerator InitGameSequence()
     {
@@ -63,7 +72,6 @@ public class GameManager : MonoBehaviour
     {
         MapManager.Instance.SetMapConfig(6, 12); //맵 수정 필요한 경우
         StartCoroutine(InitGameSequence());
-
     }
     void Update()
     {
