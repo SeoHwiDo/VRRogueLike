@@ -22,8 +22,8 @@ public class DroneCtrl : MonoBehaviour
     private Coroutine hpHideCoroutine;
 
     //드론 파티클
-    private GameObject deadPtc;
-    private GameObject spawnPtc;
+    //private GameObject deadPtc;
+    //private GameObject spawnPtc;
     private List<GameObject> hitPtcPool=new List<GameObject>();
 
 
