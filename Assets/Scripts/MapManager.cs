@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -85,7 +87,7 @@ public class MapManager : MonoBehaviour
     //맵 타일 풀링 관리
     private Dictionary<string, List<GameObject>> mapTilePool = new Dictionary<string, List<GameObject>>();
 
-    public GameObject[] enemySpawnPoint = new GameObject[4];
+    private GameObject[] enemySpawnPoint = new GameObject[4];
 
     private GameObject map;
 
@@ -208,6 +210,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < (mapSize - 2) * (mapSize - 2); i++)
         {
             string tileAdrr = tileKeys[Random.Range(0, tileKeys.Count)];
+            //생성할 타일 종류의 pool리스트가 존재하는지 확인
             if (!mapTilePool.ContainsKey(tileAdrr))
             {
                 mapTilePool[tileAdrr] = new List<GameObject>();
@@ -215,11 +218,13 @@ public class MapManager : MonoBehaviour
             GameObject reusable = mapTilePool[tileAdrr].Find(t => t != null && !t.activeInHierarchy);
             if (reusable != null)
             {
+                //타일 재활용이 가능한 경우
                 reusable.transform.position = mapInnerTransform[i];
                 reusable.SetActive(true);
             }
             else
             {
+                //타일 재활용이 불가능한 경우 새로 소환 후 pool에 등록
                 GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr]);
                 SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", tileAdrr);
             }
@@ -227,3 +232,155 @@ public class MapManager : MonoBehaviour
     }
 
 }
+#if UNITY_EDITOR
+
+
+[CustomEditor(typeof(MapManager))]
+public class MapManagerEditor : Editor
+{
+    private bool showPoolFoldout = true;
+    private readonly Dictionary<string, bool> keyFoldouts = new Dictionary<string, bool>();
+    private Vector2 poolScroll;
+
+    public override void OnInspectorGUI()
+    {
+        // 기본 인스펙터
+        DrawDefaultInspector();
+
+        var map = (MapManager)target;
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Map Controls", EditorStyles.boldLabel);
+
+        using (new EditorGUI.DisabledScope(!Application.isPlaying))
+        {
+            
+            if (GUILayout.Button("Refresh Map"))
+            {
+                map.refreshMap();
+            }
+        }
+
+        if (!Application.isPlaying)
+        {
+            EditorGUILayout.HelpBox("풀 상태는 Play 모드에서 가장 정확하게 확인할 수 있습니다.", MessageType.Info);
+        }
+
+        EditorGUILayout.Space();
+        showPoolFoldout = EditorGUILayout.Foldout(showPoolFoldout, "Map Tile Pool (목록 보기)", true);
+
+        if (!showPoolFoldout) return;
+
+        // private 필드 mapTilePool 접근
+        var poolField = typeof(MapManager).GetField("mapTilePool",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (poolField == null)
+        {
+            EditorGUILayout.HelpBox("mapTilePool 필드를 찾을 수 없습니다.", MessageType.Warning);
+            return;
+        }
+
+        var poolDict = poolField.GetValue(map) as Dictionary<string, List<GameObject>>;
+        if (poolDict == null || poolDict.Count == 0)
+        {
+            EditorGUILayout.HelpBox("현재 풀에 항목이 없습니다.", MessageType.Info);
+            return;
+        }
+
+        // 스크롤 영역 (너무 많을 때 대비)
+        EditorGUILayout.BeginVertical(GUI.skin.box);
+        poolScroll = EditorGUILayout.BeginScrollView(poolScroll, GUILayout.MaxHeight(720));
+
+        foreach (var kvp in poolDict)
+        {
+            string key = kvp.Key;
+            var list = kvp.Value;
+
+            if (!keyFoldouts.ContainsKey(key)) keyFoldouts[key] = false;
+            keyFoldouts[key] = EditorGUILayout.Foldout(keyFoldouts[key], $"{key}  (총 {list?.Count ?? 0}개)", true);
+
+            if (!keyFoldouts[key]) continue;
+
+            EditorGUI.indentLevel++;
+            if (list == null || list.Count == 0)
+            {
+                EditorGUILayout.LabelField("비어 있음");
+            }
+            else
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var go = list[i];
+
+                    EditorGUILayout.BeginHorizontal();
+
+                    // 오브젝트 필드 (씬 개체로 핑/선택 가능)
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField($"[{i}]", go, typeof(GameObject), true);
+                    EditorGUI.EndDisabledGroup();
+
+                    // 상태 표시 (Active/Inactive)
+                    string state;
+                    Color col;
+                    if (go == null)
+                    {
+                        state = "Null";
+                        col = Color.red;
+                    }
+                    else if (go.activeInHierarchy)
+                    {
+                        state = "Active";
+                        col = Color.green;
+                    }
+                    else
+                    {
+                        state = "Inactive";
+                        col = Color.gray;
+                    }
+
+                    var stateStyle = new GUIStyle(EditorStyles.miniBoldLabel);
+                    stateStyle.normal.textColor = col;
+                    GUILayout.Label(state, stateStyle, GUILayout.Width(70));
+
+                    // 선택/핑 버튼
+                    //if (go != null)
+                    //{
+                    //    if (GUILayout.Button("Select", GUILayout.Width(56)))
+                    //    {
+                    //        Selection.activeObject = go;
+                    //    }
+                    //    if (GUILayout.Button("Ping", GUILayout.Width(46)))
+                    //    {
+                    //        EditorGUIUtility.PingObject(go);
+                    //    }
+
+                    //    // 런타임에서 토글로 활성/비활성 변경
+                    //    using (new EditorGUI.DisabledScope(!Application.isPlaying))
+                    //    {
+                    //        bool newActive = EditorGUILayout.Toggle(go.activeSelf, GUILayout.Width(18));
+                    //        if (newActive != go.activeSelf)
+                    //        {
+                    //            go.SetActive(newActive);
+                    //            // 씬 갱신
+                    //            EditorUtility.SetDirty(go);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    GUILayout.Space(56 + 46 + 18); // 버튼/토글 자리 맞추기
+                    //}
+
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUI.indentLevel--;
+            EditorGUILayout.Space();
+        }
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
+    }
+}
+#endif
