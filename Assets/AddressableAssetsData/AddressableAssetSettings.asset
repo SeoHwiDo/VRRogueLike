@@ -80,6 +80,10 @@ MonoBehaviour:
     - default
     - Map
     - Enemy
+    - Ptc
+    - Player
+    - UI
+    - Etc
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: eadcb23343dfbda4084ac6abef81d1d1, type: 2}

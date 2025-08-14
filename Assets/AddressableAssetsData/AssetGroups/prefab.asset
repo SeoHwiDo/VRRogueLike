@@ -30,7 +30,8 @@ MonoBehaviour:
   - m_GUID: 606508a750df9e048877db88747b715a
     m_Address: DroneSpawnPoint
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Map
   - m_GUID: 4b140aa7d95eca04a9e7d4a515077645
     m_Address: map_door
     m_ReadOnly: 0
@@ -39,7 +40,8 @@ MonoBehaviour:
   - m_GUID: acea88d7fe581544c9a31e76dbed3447
     m_Address: map_corner
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Map
   - m_GUID: ff596c184326d614bb0eefcee832dd80
     m_Address: map_tile_04
     m_ReadOnly: 0
@@ -56,45 +58,55 @@ MonoBehaviour:
     m_SerializedLabels:
     - Map
   - m_GUID: 758043a040001ef4ea659df66dc7f03d
-    m_Address: PlayerPrefab
+    m_Address: Player
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Player
   - m_GUID: b2352fb70016a8542adfc37a626363ec
     m_Address: Drone_02
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Enemy
   - m_GUID: d63282e774904234baa2748a3981d2a2
     m_Address: Drone_04
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Enemy
   - m_GUID: 01a028bae9374e545b2405663e51dac3
     m_Address: Drone_01
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Enemy
   - m_GUID: 5423e47b7a1dd5641860a39ca7509c46
     m_Address: Drone_03
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Enemy
   - m_GUID: 2be6dc851bf09934f949232acced76f3
     m_Address: Drone_Move
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Etc
   - m_GUID: f9a3cdb4bfa8ec44687c0505e2ebc08a
     m_Address: HpBar
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - UI
   - m_GUID: c681867400497e54d83434a5efac2bad
     m_Address: EnemyDeadPtc
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Ptc
   - m_GUID: 96730f8640590934eacb6f860058e7f9
     m_Address: EnemySpawnPtc
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Ptc
   - m_GUID: 0ed3aa0ad0ea90d4c8bc8240d451b1ce
     m_Address: HitPtc
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Ptc
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:
