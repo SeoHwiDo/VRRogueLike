@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Game State")]
     private int level = 1;
     private int maxLevel = 4;
-    private float bulletSpeed = 5f;
+    private float bulletSpeed = 10f;
 
     private int enemyCount=0;
     private int killEnemyCount = 0;

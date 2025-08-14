@@ -73,7 +73,7 @@ public class InputManager : MonoBehaviour
         }
         return Vector2.zero;
     }
-    private bool GetFireKey()
+    public bool GetFireKey()
     {
         switch (inputType)
         {
