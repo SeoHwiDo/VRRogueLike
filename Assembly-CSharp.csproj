@@ -206,6 +206,7 @@
      <Compile Include="Assets\Scripts\CtrlManager.cs" />
      <Compile Include="Assets\Scripts\DroneCtrl.cs" />
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
+     <Compile Include="Assets\Scripts\FirePtc.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\GaugeManager.cs" />
      <Compile Include="Assets\Scripts\GunFire.cs" />
