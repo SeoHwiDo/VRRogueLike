@@ -17,6 +17,9 @@ public class BulletCtrl : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         //만약 타격한 물체의 태그가 drone일때,
         if(other.transform.CompareTag("drone")|| other.transform.CompareTag("wall"))
+        {
             this.gameObject.SetActive(false);
+            SkillManager.Instance.InPool(this.gameObject);
+        }
     }
 }
