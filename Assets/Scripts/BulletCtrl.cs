@@ -5,10 +5,7 @@ using UnityEngine;
 public class BulletCtrl : MonoBehaviour
 {
     // Update is called once per frame
-    private void Awake()
-    {
-        this.gameObject.SetActive(true);
-    }
+
     void Update()
     {
         //매 프레임마다 갱신
