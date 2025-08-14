@@ -2,11 +2,11 @@
 
 public class CtrlManager : MonoBehaviour
 {
-    public Transform playerBody;
-    public Transform cameraPivot;
+    [SerializeField]private Transform cameraPivot;
+    private Transform playerBody;
     private float pitchRotation = 0f;
 
-    public void Look(Vector2 delta)
+    private void Look(Vector2 delta)
     {
         float yawDelta = delta.x * Time.deltaTime;
         float pitchDelta = delta.y * Time.deltaTime;
@@ -21,16 +21,20 @@ public class CtrlManager : MonoBehaviour
         if (playerBody != null)
             playerBody.Rotate(Vector3.up * yawDelta);
     }
+    
     void Start()
     {
+        playerBody = GameManager.Instance.player.transform;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
     void Update()
     {
-
         Vector2 lookDelta = InputManager.Instance.GetLookAxis();
-
+        if (InputManager.Instance.GetFireKey())
+        {
+            SkillManager.Instance.ShootBullet();
+        }
         if (lookDelta != Vector2.zero)
         {
             Look(lookDelta);
