@@ -47,16 +47,24 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator InitGameSequence()
     {
-        yield return StartCoroutine(MapManager.Instance.PreloadMapPrefabs(() =>
+        yield return StartCoroutine(AssetManager.Instance.AssetPreload(() =>
         {
+            MapManager.Instance.SetInitializedPrefab();
+            EnemyManager.Instance.SetInitializedPrefab();
             MapManager.Instance.GenerateMap();
             player.transform.position = MapManager.Instance.GetPlayerStartPosition();
-        }));
-
-        yield return StartCoroutine(EnemyManager.Instance.PreloadEnemyPrefabs(() =>
-        {
             StartCoroutine(EnemyManager.Instance.Spawn());
         }));
+        //yield return StartCoroutine(MapManager.Instance.PreloadMapPrefabs(() =>
+        //{
+        //    MapManager.Instance.GenerateMap();
+        //    player.transform.position = MapManager.Instance.GetPlayerStartPosition();
+        //}));
+
+        //yield return StartCoroutine(EnemyManager.Instance.PreloadEnemyPrefabs(() =>
+        //{
+        //    StartCoroutine(EnemyManager.Instance.Spawn());
+        //}));
     }
     void Awake()
     {

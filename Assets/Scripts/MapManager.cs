@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+//using UnityEngine.AddressableAssets;
+//using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 //맵 타일 생성 위치 및 회전 정보 struct
@@ -27,44 +27,46 @@ public class MapManager : MonoBehaviour
     private int mapSize = 5;
     private float tileSize = 12;
     //맵 프리팹 관리
-    private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
+    //private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> prefabCache;
+    private List<GameObject> tilePrefabs;
 
-    private List<string> tileKeys = new List<string>()
-    {
-        "map_tile_01",
-        "map_tile_02",
-        "map_tile_03",
-        "map_tile_04"
-    };
-    private List<string> prefabKeys = new List<string>()
-    {
-        "map_corner",
-        "map_wall",
-        "map_door",
-        "DroneSpawnPoint"
-    };
+    //private List<string> tileKeys = new List<string>()
+    //{
+    //    "map_tile_01",
+    //    "map_tile_02",
+    //    "map_tile_03",
+    //    "map_tile_04"
+    //};
+    //private List<string> prefabKeys = new List<string>()
+    //{
+    //    "map_corner",
+    //    "map_wall",
+    //    "map_door",
+    //    "DroneSpawnPoint"
+    //};
 
-    public IEnumerator PreloadMapPrefabs(System.Action onComplete = null)
-    {
-        prefabKeys.AddRange(tileKeys);
+    //public IEnumerator PreloadMapPrefabs(System.Action onComplete = null)
+    //{
+    //    prefabKeys.AddRange(tileKeys);
 
-        foreach (string addr in prefabKeys)
-        {
-            var handle = Addressables.LoadAssetAsync<GameObject>(addr);
-            yield return handle;
+    //    foreach (string addr in prefabKeys)
+    //    {
+    //        var handle = Addressables.LoadAssetAsync<GameObject>(addr);
+    //        yield return handle;
 
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                prefabCache[addr] = handle.Result;
-            }
-            else
-            {
-                Debug.LogError($"[Addressable] Failed to load {addr}");
-            }
-        }
+    //        if (handle.Status == AsyncOperationStatus.Succeeded)
+    //        {
+    //            prefabCache[addr] = handle.Result;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError($"[Addressable] Failed to load {addr}");
+    //        }
+    //    }
 
-        onComplete?.Invoke(); // 프리팹 로딩 완료 시 콜백
-    }
+    //    onComplete?.Invoke(); // 프리팹 로딩 완료 시 콜백
+    //}
 
     //맵 타일 생성 방향
     private enum Direction { TopLeft, TopRight, BottomLeft, BottomRight, Up, Down, Left, Right, Center }
@@ -97,6 +99,7 @@ public class MapManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
     }
 
     private void SetInstance(GameObject instance, Vector3 localPoistion, Quaternion localRotation, Transform parent, string nameSuffix = "", string poolName = null)
@@ -112,6 +115,12 @@ public class MapManager : MonoBehaviour
         }
     }
     //외부 스크립트용 getter,setter
+    public void SetInitializedPrefab()
+    {
+        tilePrefabs = AssetManager.Instance.GetLabelCache("MapTile");
+        prefabCache = AssetManager.Instance.GetPrefabCache();
+
+    }
     public void SetMapConfig(int mapSize, float tileSize)
     {
         this.mapSize = mapSize;
@@ -177,6 +186,7 @@ public class MapManager : MonoBehaviour
             sideWall.transform.SetParent(map.transform, false);
         }
         //내부 타일 위치값
+       
         mapInnerTransform = new Vector3[(mapSize - 2) * (mapSize - 2)];
         //맵 타일 생성
         //최초 생성시에는 pool 사용 않고 바로 생성
@@ -187,14 +197,18 @@ public class MapManager : MonoBehaviour
             int col = i % (mapSize - 2);
 
             mapInnerTransform[i] = new Vector3((row - (mapSize - 3) / 2f) * tileSize, 0, (col - (mapSize - 3) / 2f) * tileSize);
-
-            string tileAdrr = tileKeys[Random.Range(0, tileKeys.Count)];
-            if (!mapTilePool.ContainsKey(tileAdrr))
+            if (tilePrefabs == null || tilePrefabs.Count == 0)
             {
-                mapTilePool[tileAdrr] = new List<GameObject>();
+                Debug.LogError("No map tiles found with label 'MapTile'");
+                continue;
             }
-            GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr]);
-            SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", tileAdrr);
+            var prefab = tilePrefabs[Random.Range(0, tilePrefabs.Count)];
+            if (!mapTilePool.ContainsKey(prefab.name))
+            {
+                mapTilePool[prefab.name] = new List<GameObject>();
+            }
+            GameObject inner_Map_Tile = Instantiate(prefab);
+            SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", prefab.name);
         }
     }
     public void refreshMap()
@@ -209,13 +223,13 @@ public class MapManager : MonoBehaviour
         }
         for (int i = 0; i < (mapSize - 2) * (mapSize - 2); i++)
         {
-            string tileAdrr = tileKeys[Random.Range(0, tileKeys.Count)];
+            var prefab = tilePrefabs[Random.Range(0, tilePrefabs.Count)];
             //생성할 타일 종류의 pool리스트가 존재하는지 확인
-            if (!mapTilePool.ContainsKey(tileAdrr))
+            if (!mapTilePool.ContainsKey(prefab.name))
             {
-                mapTilePool[tileAdrr] = new List<GameObject>();
+                mapTilePool[prefab.name] = new List<GameObject>();
             }
-            GameObject reusable = mapTilePool[tileAdrr].Find(t => t != null && !t.activeInHierarchy);
+            GameObject reusable = mapTilePool[prefab.name].Find(t => t != null && !t.activeInHierarchy);
             if (reusable != null)
             {
                 //타일 재활용이 가능한 경우
@@ -225,8 +239,8 @@ public class MapManager : MonoBehaviour
             else
             {
                 //타일 재활용이 불가능한 경우 새로 소환 후 pool에 등록
-                GameObject inner_Map_Tile = Instantiate(prefabCache[tileAdrr]);
-                SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", tileAdrr);
+                GameObject inner_Map_Tile = Instantiate(prefab);
+                SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", prefab.name);
             }
         }
     }

@@ -9,19 +9,20 @@ public class EnemyManager : MonoBehaviour
 {
     //addressable로부터 preload한 프리팹 관리
     public static EnemyManager Instance { get; private set; }
-    private Dictionary<string,GameObject> prefabCache=new Dictionary<string,GameObject>();
-    private List<string> droneKeys = new List<string>()
-    {
-        "Drone_01",
-        "Drone_02",
-        "Drone_03",
-        "Drone_04",
-    };
-    private List<string> prefabKeys = new List<string>()
-    {
-        "EnemyDeadPtc",
-        "EnemySpawnPtc",
-    };
+    private Dictionary<string, GameObject> prefabCache;
+    private List<GameObject> enemyPrefabs;
+    //private List<string> droneKeys = new List<string>()
+    //{
+    //    "Drone_01",
+    //    "Drone_02",
+    //    "Drone_03",
+    //    "Drone_04",
+    //};
+    //private List<string> prefabKeys = new List<string>()
+    //{
+    //    "EnemyDeadPtc",
+    //    "EnemySpawnPtc",
+    //};
     private List<GameObject> deadPtcPool = new List<GameObject>();
     public void InstanceEnemyDeadPtc(Vector3 pos)
     {
@@ -33,7 +34,7 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
-            Addressables.InstantiateAsync("HitPtc").Completed += handle =>
+            Addressables.InstantiateAsync("EnemyDeadPtc").Completed += handle =>
             {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
@@ -43,33 +44,43 @@ public class EnemyManager : MonoBehaviour
                 }
             };
         }
-}
-    public IEnumerator PreloadEnemyPrefabs(System.Action onComplete = null)
-    {
-        var keysToLoad = droneKeys
-            .Concat(prefabKeys)
-            .Distinct()
-            .Where(key => !prefabCache.ContainsKey(key))
-            .ToList();
-
-        foreach (string addr in keysToLoad)
-        {
-            var handle = Addressables.LoadAssetAsync<GameObject>(addr);
-            yield return handle;
-
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                prefabCache[addr] = handle.Result;
-            }
-            else
-            {
-                Debug.LogError($"[Addressable] Failed to load {addr}");
-            }
-        }
-
-        onComplete?.Invoke();
     }
-    public IEnumerator Spawn()
+    //public IEnumerator PreloadEnemyPrefabs(System.Action onComplete = null)
+    //{
+    //    var keysToLoad = droneKeys
+    //        .Concat(prefabKeys)
+    //        .Distinct()
+    //        .Where(key => !prefabCache.ContainsKey(key))
+    //        .ToList();
+
+    //    foreach (string addr in keysToLoad)
+    //    {
+    //        var handle = Addressables.LoadAssetAsync<GameObject>(addr);
+    //        yield return handle;
+
+    //        if (handle.Status == AsyncOperationStatus.Succeeded)
+    //        {
+    //            prefabCache[addr] = handle.Result;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError($"[Addressable] Failed to load {addr}");
+    //        }
+    //    }
+
+    //    onComplete?.Invoke();
+    //}
+void Awake()
+{
+    if (Instance == null) Instance = this;
+    else Destroy(gameObject);
+}
+public void SetInitializedPrefab()
+{
+    prefabCache = AssetManager.Instance.GetPrefabCache();
+    enemyPrefabs = AssetManager.Instance.GetLabelCache("Enemy");
+}
+public IEnumerator Spawn()
     {
         int spawnDroneNum = 10;
         for (int i = 0; i < spawnDroneNum; i++)
@@ -79,11 +90,7 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForSeconds(6f);
         }
     }
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
+
     //Enemy 풀링
     private Dictionary<string,List<GameObject>> enemyPool = new Dictionary<string,List<GameObject>>();
     private void SetInstance(GameObject instance, Vector3 localPoistion, Quaternion localRotation, Transform parent, string nameSuffix = "", string poolName = null)
@@ -104,19 +111,14 @@ public class EnemyManager : MonoBehaviour
     public void SpawnEnemy()
     {
         //드론 오브젝트 선택
-        
-        if (droneKeys.Count == 0)
+
+        if (enemyPrefabs == null || enemyPrefabs.Count == 0)
         {
-            Debug.LogWarning("droneKeys is empty!");
+            Debug.LogError("No map tiles found with label 'MapTile'");
             return;
         }
-        string rndEnemyKey = droneKeys[Random.Range(0, droneKeys.Count)];
-        if (!prefabCache.ContainsKey(rndEnemyKey))
-        {
-            Debug.LogError($"Prefab for key '{rndEnemyKey}' not found in cache.");
-            return;
-        }
-        GameObject rndEnemy=prefabCache[rndEnemyKey];
+
+        GameObject rndEnemy= enemyPrefabs[Random.Range(0, enemyPrefabs.Count)]; 
 
         //드론 소환할 위치
 
@@ -135,11 +137,11 @@ public class EnemyManager : MonoBehaviour
         Vector3 rndEnemySpawnPointPos = rndEnemySpawnPoint.transform.position + Vector3.down;
 
         //pool 잔여량 확인
-        if (!enemyPool.ContainsKey(rndEnemyKey))
+        if (!enemyPool.ContainsKey(rndEnemy.name))
         {
-            enemyPool[rndEnemyKey] = new List<GameObject>();
+            enemyPool[rndEnemy.name] = new List<GameObject>();
         }
-        GameObject reusable = enemyPool[rndEnemyKey].Find(t => t != null && !t.activeInHierarchy);
+        GameObject reusable = enemyPool[rndEnemy.name].Find(t => t != null && !t.activeInHierarchy);
         
         if (reusable != null)
         {
@@ -148,8 +150,8 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
-            reusable = Instantiate(prefabCache[rndEnemyKey], rndEnemySpawnPointPos, Quaternion.identity);
-            enemyPool[rndEnemyKey].Add(reusable);
+            reusable = Instantiate(rndEnemy, rndEnemySpawnPointPos, Quaternion.identity);
+            enemyPool[rndEnemy.name].Add(reusable);
 
             var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
             SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
