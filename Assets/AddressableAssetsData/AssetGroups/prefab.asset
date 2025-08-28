@@ -26,7 +26,7 @@ MonoBehaviour:
     m_Address: map_tile_01
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map
+    - MapTile
   - m_GUID: 606508a750df9e048877db88747b715a
     m_Address: DroneSpawnPoint
     m_ReadOnly: 0
@@ -46,17 +46,17 @@ MonoBehaviour:
     m_Address: map_tile_04
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map
+    - MapTile
   - m_GUID: 225b068d6218b7647b370b06adfd399d
     m_Address: map_tile_03
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map
+    - MapTile
   - m_GUID: 6ac9ed3f802d3084490d5c43d3091a8f
     m_Address: map_tile_02
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Map
+    - MapTile
   - m_GUID: 758043a040001ef4ea659df66dc7f03d
     m_Address: Player
     m_ReadOnly: 0
