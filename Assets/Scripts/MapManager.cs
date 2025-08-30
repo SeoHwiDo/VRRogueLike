@@ -27,46 +27,8 @@ public class MapManager : MonoBehaviour
     private int mapSize = 5;
     private float tileSize = 12;
     //맵 프리팹 관리
-    //private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> prefabCache;
     private List<GameObject> tilePrefabs;
-
-    //private List<string> tileKeys = new List<string>()
-    //{
-    //    "map_tile_01",
-    //    "map_tile_02",
-    //    "map_tile_03",
-    //    "map_tile_04"
-    //};
-    //private List<string> prefabKeys = new List<string>()
-    //{
-    //    "map_corner",
-    //    "map_wall",
-    //    "map_door",
-    //    "DroneSpawnPoint"
-    //};
-
-    //public IEnumerator PreloadMapPrefabs(System.Action onComplete = null)
-    //{
-    //    prefabKeys.AddRange(tileKeys);
-
-    //    foreach (string addr in prefabKeys)
-    //    {
-    //        var handle = Addressables.LoadAssetAsync<GameObject>(addr);
-    //        yield return handle;
-
-    //        if (handle.Status == AsyncOperationStatus.Succeeded)
-    //        {
-    //            prefabCache[addr] = handle.Result;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError($"[Addressable] Failed to load {addr}");
-    //        }
-    //    }
-
-    //    onComplete?.Invoke(); // 프리팹 로딩 완료 시 콜백
-    //}
 
     //맵 타일 생성 방향
     private enum Direction { TopLeft, TopRight, BottomLeft, BottomRight, Up, Down, Left, Right, Center }

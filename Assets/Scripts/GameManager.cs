@@ -55,26 +55,15 @@ public class GameManager : MonoBehaviour
             player.transform.position = MapManager.Instance.GetPlayerStartPosition();
             StartCoroutine(EnemyManager.Instance.Spawn());
         }));
-        //yield return StartCoroutine(MapManager.Instance.PreloadMapPrefabs(() =>
-        //{
-        //    MapManager.Instance.GenerateMap();
-        //    player.transform.position = MapManager.Instance.GetPlayerStartPosition();
-        //}));
-
-        //yield return StartCoroutine(EnemyManager.Instance.PreloadEnemyPrefabs(() =>
-        //{
-        //    StartCoroutine(EnemyManager.Instance.Spawn());
-        //}));
     }
     void Awake()
     {
-
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
+        if (Instance == null)
+        {
             Instance = this;
-
-        DontDestroyOnLoad(gameObject); // 필요 시
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
     }
     void Start()
     {

@@ -11,18 +11,6 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager Instance { get; private set; }
     private Dictionary<string, GameObject> prefabCache;
     private List<GameObject> enemyPrefabs;
-    //private List<string> droneKeys = new List<string>()
-    //{
-    //    "Drone_01",
-    //    "Drone_02",
-    //    "Drone_03",
-    //    "Drone_04",
-    //};
-    //private List<string> prefabKeys = new List<string>()
-    //{
-    //    "EnemyDeadPtc",
-    //    "EnemySpawnPtc",
-    //};
     private List<GameObject> deadPtcPool = new List<GameObject>();
     public void InstanceEnemyDeadPtc(Vector3 pos)
     {
@@ -45,36 +33,7 @@ public class EnemyManager : MonoBehaviour
             };
         }
     }
-    //public IEnumerator PreloadEnemyPrefabs(System.Action onComplete = null)
-    //{
-    //    var keysToLoad = droneKeys
-    //        .Concat(prefabKeys)
-    //        .Distinct()
-    //        .Where(key => !prefabCache.ContainsKey(key))
-    //        .ToList();
 
-    //    foreach (string addr in keysToLoad)
-    //    {
-    //        var handle = Addressables.LoadAssetAsync<GameObject>(addr);
-    //        yield return handle;
-
-    //        if (handle.Status == AsyncOperationStatus.Succeeded)
-    //        {
-    //            prefabCache[addr] = handle.Result;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError($"[Addressable] Failed to load {addr}");
-    //        }
-    //    }
-
-    //    onComplete?.Invoke();
-    //}
-void Awake()
-{
-    if (Instance == null) Instance = this;
-    else Destroy(gameObject);
-}
 public void SetInitializedPrefab()
 {
     prefabCache = AssetManager.Instance.GetPrefabCache();
@@ -155,13 +114,6 @@ public IEnumerator Spawn()
 
             var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
             SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
-
-
-
-            //reusable.GetComponent<DroneCtrl>().InitializePtc(spawnPtc);
-
-
-            
         }
     }
 }
