@@ -6,22 +6,23 @@ public class PlayerManager : MonoBehaviour
 {
    public static PlayerManager Instance { get; private set; }
     private List<GameObject> atkEnemy = new List<GameObject>();
-    private float MaxHP = 10;
-    private float HP = 10;
+    private float HP;
 
-    void Awake()
+    private void Awake()
     {
-
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
+        if (Instance == null)
+        {
             Instance = this;
-
-        DontDestroyOnLoad(gameObject); // 필요 시
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    public float GetPlayerMaxHP()
+    void Start()
     {
-        return MaxHP;
+        HP=GameManager.Instance.GetPlayerMaxHP();
     }
     public float GetPlayerHP()
     {

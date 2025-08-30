@@ -9,33 +9,22 @@ public class GameManager : MonoBehaviour
 
     [Header("Player")]
     public GameObject player;
+    [SerializeField]private float MaxHP = 10;
+    [SerializeField]private float bulletSpeed = 10f;
+    [SerializeField]private float bulletDamage = 1f;
+    [SerializeField]private int bulletMax = 25;
 
     [Header("Game State")]
-    private int level = 1;
-    private int maxLevel = 4;
-    private float bulletSpeed = 10f;
-
-    private int enemyCount=0;
-    private int killEnemyCount = 0;
-    private bool isGameOver = false;
-
-    public int GetEnemyCount()
+    [SerializeField] private int level = 1;
+    [SerializeField] private int maxLevel = 4;
+    [SerializeField] private bool isGameOver = false;
+    public float GetPlayerMaxHP()
     {
-        return enemyCount;
+        return MaxHP;
     }
-    public int GetkillEnemyCount()
+    public float GetBulletDamage()
     {
-        return killEnemyCount;
-    }
-    public void AddEnemyCount(int num=1)
-    {
-        enemyCount += num;
-    }
-    public void DeadEnemy()
-    {
-        enemyCount -= 1;
-        killEnemyCount += 1;
-
+        return bulletDamage;
     }
     public float GetBulletSpeed()
     {
@@ -45,6 +34,12 @@ public class GameManager : MonoBehaviour
     {
         bulletSpeed = speed;
     }
+    public void AddBulletMax(int max)
+    {
+        bulletMax += max;
+    }
+
+
     private IEnumerator InitGameSequence()
     {
         yield return StartCoroutine(AssetManager.Instance.AssetPreload(() =>

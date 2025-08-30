@@ -72,7 +72,7 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateHPUI(float hp)
     {
-        hpInspector.fillAmount = hp / PlayerManager.Instance.GetPlayerMaxHP();
+        hpInspector.fillAmount = hp / GameManager.Instance.GetPlayerMaxHP();
     }
     public void UpdateSkillUI(float skill)
     {
@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour
     public void ShowGameOverUI(bool isWin)
     {
         gameOverUI.SetActive(true);
-        resultText.text = GameManager.Instance.GetkillEnemyCount().ToString();
+        resultText.text = EnemyManager.Instance.GetkillEnemyCount().ToString();
     }
     public void ShowCautionText(string message)
     {

@@ -8,17 +8,15 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 public class DroneCtrl : MonoBehaviour
 {
-   
-    
-
     //오디오 소스 관리
     private AudioClip droneMoveSound;
     //private AudioClip droneDeadSound;
     private AudioSource audioSource;
 
     //드론의 체력 바 
-    [SerializeField] private Image hpGauge;
+    [SerializeField]private Image hpGauge;
     [SerializeField]private Canvas enemyHP;
+    [SerializeField] private float damage;
     private Coroutine hpHideCoroutine;
 
     //드론 파티클
@@ -110,7 +108,7 @@ public class DroneCtrl : MonoBehaviour
     {
         if (isDead) return; // 이미 죽었으면 리턴
         isDead = true;
-        GameManager.Instance.DeadEnemy();
+        EnemyManager.Instance.DeadEnemy();
         EnemyManager.Instance.InstanceEnemyDeadPtc(this.transform.position);
 
         this.gameObject.SetActive(false);
@@ -193,7 +191,7 @@ public class DroneCtrl : MonoBehaviour
             if (!atkPlayerEnemy.Contains(other.gameObject))
             {
                 atkPlayerEnemy.Add(other.gameObject);
-                PlayerManager.Instance.LosePlayerHP(1f);
+                PlayerManager.Instance.LosePlayerHP(damage);
                 UIManager.Instance.UpdateHPUI(PlayerManager.Instance.GetPlayerHP());
                 //진동 피드백
                 Handheld.Vibrate();
@@ -209,7 +207,7 @@ public class DroneCtrl : MonoBehaviour
             Debug.Log("hit "+other.gameObject.name);
             InstanceHitPtc(other.gameObject.transform.position);
             ShowHPBar();
-            loseHP(1);
+            loseHP(GameManager.Instance.GetBulletDamage());
         }
     }
 }

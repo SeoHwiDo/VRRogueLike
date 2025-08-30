@@ -12,6 +12,26 @@ public class EnemyManager : MonoBehaviour
     private Dictionary<string, GameObject> prefabCache;
     private List<GameObject> enemyPrefabs;
     private List<GameObject> deadPtcPool = new List<GameObject>();
+
+    private int spawnEnemyNum;
+    private int enemyCount;
+    private int killEnemyCount;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+    }
+    void Start()
+    {
+        spawnEnemyNum = 10;
+        enemyCount = 0;
+        killEnemyCount = 0;
+    }
+    //오브젝트 관리
     public void InstanceEnemyDeadPtc(Vector3 pos)
     {
         GameObject reusable = deadPtcPool.Find(t => t != null && !t.activeInHierarchy);
@@ -41,13 +61,14 @@ public void SetInitializedPrefab()
 }
 public IEnumerator Spawn()
     {
-        int spawnDroneNum = 10;
-        for (int i = 0; i < spawnDroneNum; i++)
+        for (int i = 0; i < spawnEnemyNum; i++)
         {
             yield return new WaitForSeconds(0.5f);
             SpawnEnemy();
+            AddEnemyCount();
             yield return new WaitForSeconds(6f);
         }
+        if (GetEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
     }
 
     //Enemy 풀링
@@ -115,5 +136,28 @@ public IEnumerator Spawn()
             var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
             SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
         }
+    }
+    //enemySystem 관리
+    public void AddSpawnEnemyNum(int num)
+    {
+        spawnEnemyNum += num; 
+    }
+    public int GetEnemyCount()
+    {
+        return enemyCount;
+    }
+    public int GetkillEnemyCount()
+    {
+        return killEnemyCount;
+    }
+    public void AddEnemyCount(int num = 1)
+    {
+        enemyCount += num;
+    }
+    public void DeadEnemy()
+    {
+        enemyCount -= 1;
+        killEnemyCount += 1;
+
     }
 }
