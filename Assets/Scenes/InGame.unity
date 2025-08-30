@@ -514,6 +514,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1705104434}
+  MaxHP: 10
+  bulletSpeed: 10
+  bulletDamage: 1
+  bulletMax: 25
+  level: 1
+  maxLevel: 4
+  isGameOver: 0
 --- !u!4 &799308657
 Transform:
   m_ObjectHideFlags: 0
@@ -1153,8 +1160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0edd72c453571a94993566bcf372972f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 2604385316405505180, guid: 6a647a536473cbf43accc92d36f36390, type: 3}
-  FirePtc: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  bullet: {fileID: 2604385316405505180, guid: 6a647a536473cbf43accc92d36f36390, type: 3}
+  firePtc: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
 --- !u!1 &1854713914
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ public class CtrlManager : MonoBehaviour
         Vector2 lookDelta = InputManager.Instance.GetLookAxis();
         if (InputManager.Instance.GetFireKey())
         {
-            SkillManager.Instance.ShootBullet();
+            SkillManager.Instance.StartShooting();
         }
         if (lookDelta != Vector2.zero)
         {
