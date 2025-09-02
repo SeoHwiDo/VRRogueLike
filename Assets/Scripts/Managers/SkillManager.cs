@@ -6,8 +6,8 @@ public class SkillManager : MonoBehaviour
 {
     public static SkillManager Instance {  get; private set; }
     private AudioSource audioSource;
-    private AudioClip fireSound;
-  
+
+    //[SerializeField]private AudioClip fireSound;
     [SerializeField]private GameObject bullet;
     [SerializeField]private GameObject firePtc;
     private float bulletSize;
@@ -29,7 +29,7 @@ public class SkillManager : MonoBehaviour
     }
     private void Start()
     {
-        fireSound = Resources.Load<AudioClip>("Sounds/FireSound");
+        
         audioSource = GetComponent<AudioSource>();
         shootCnt = 3;
         bulletSize = 1f;
@@ -69,7 +69,7 @@ public class SkillManager : MonoBehaviour
 
     private void ShootBullet()
     {
-        audioSource.PlayOneShot(fireSound);
+        //audioSource.PlayOneShot(fireSound);
         PoolingObj(firePtcPool, firePtc);
         PoolingObj(bulletPool, bullet);
     }

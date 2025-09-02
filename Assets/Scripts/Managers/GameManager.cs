@@ -40,16 +40,12 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator InitGameSequence()
+    private void InitGameSequence()
     {
-        yield return StartCoroutine(AssetManager.Instance.AssetPreload(() =>
-        {
-            MapManager.Instance.SetInitializedPrefab();
-            EnemyManager.Instance.SetInitializedPrefab();
-            MapManager.Instance.GenerateMap();
-            player.transform.position = MapManager.Instance.GetPlayerStartPosition();
-            StartCoroutine(EnemyManager.Instance.Spawn());
-        }));
+        MapManager.Instance.GenerateMap();
+        player.transform.position = MapManager.Instance.GetPlayerStartPosition();
+        StartCoroutine(EnemyManager.Instance.Spawn());
+        
     }
     void Awake()
     {
@@ -62,8 +58,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        MapManager.Instance.SetMapConfig(6, 12); //맵 수정 필요한 경우
-        StartCoroutine(InitGameSequence());
+        //MapManager.Instance.SetMapConfig(6, 12); //맵 수정 필요한 경우
+        InitGameSequence();
         UIManager.Instance.UpdateLevelUI(level);
     }
     void Update()

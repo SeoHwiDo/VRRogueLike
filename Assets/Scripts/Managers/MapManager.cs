@@ -27,9 +27,8 @@ public class MapManager : MonoBehaviour
     private int mapSize = 5;
     private float tileSize = 12;
     //맵 프리팹 관리
-    private Dictionary<string, GameObject> prefabCache;
-    private List<GameObject> tilePrefabs;
-
+    [SerializeField] private MapConfig stage01;
+    [SerializeField] private CommonMapConfig commonMapPrefab;
     //맵 타일 생성 방향
     private enum Direction { TopLeft, TopRight, BottomLeft, BottomRight, Up, Down, Left, Right, Center }
 
@@ -77,12 +76,7 @@ public class MapManager : MonoBehaviour
         }
     }
     //외부 스크립트용 getter,setter
-    public void SetInitializedPrefab()
-    {
-        tilePrefabs = AssetManager.Instance.GetLabelCache("MapTile");
-        prefabCache = AssetManager.Instance.GetPrefabCache();
 
-    }
     public void SetMapConfig(int mapSize, float tileSize)
     {
         this.mapSize = mapSize;
@@ -111,7 +105,7 @@ public class MapManager : MonoBehaviour
         {
             Direction corner = (Direction)i;
             var data = tileTransform[corner];
-            SetInstance(Instantiate(prefabCache["map_corner"]), data.position * offset, data.rotation, map.transform, $"_{corner}");
+            SetInstance(Instantiate(stage01.cornerPrefab), data.position * offset, data.rotation, map.transform, $"_{corner}");
         }
         //벽 타일 생성
         int cnt = 0;
@@ -126,14 +120,15 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < (mapSize - 2); j++)
             {
                 bool isCenter = doorIdx == j;
-                string wallType = isCenter ? "map_door" : "map_wall";
+                GameObject wallType = isCenter ? stage01.wallPrefab : stage01.wallPrefab;
+                GameObject side_Map_Tile = Instantiate(wallType);
+
                 Vector3 localPosition = new Vector3((j - (mapSize - 3) / 2f) * tileSize, 0, 0);
-                GameObject side_Map_Tile = Instantiate(prefabCache[wallType]);
                 SetInstance(side_Map_Tile, localPosition, Quaternion.identity, sideWall.transform, $"_{side}");
                 //문 위치에 드론 스폰 지점
                 if (isCenter)
                 {
-                    GameObject SpawnPointInstance = Instantiate(prefabCache["DroneSpawnPoint"]);
+                    GameObject SpawnPointInstance = Instantiate(commonMapPrefab.enemySpawnPointPrefab);
                     SetInstance(SpawnPointInstance, Vector3.zero + Vector3.up * 3.65f, Quaternion.Euler(0,180f,0), side_Map_Tile.transform, $"_{side}");
                     if (cnt < enemySpawnPoint.Length)
                     {
@@ -159,12 +154,12 @@ public class MapManager : MonoBehaviour
             int col = i % (mapSize - 2);
 
             mapInnerTransform[i] = new Vector3((row - (mapSize - 3) / 2f) * tileSize, 0, (col - (mapSize - 3) / 2f) * tileSize);
-            if (tilePrefabs == null || tilePrefabs.Count == 0)
+            if (stage01.innerTilePrefab == null || stage01.innerTilePrefab.Length == 0)
             {
                 Debug.LogError("No map tiles found with label 'MapTile'");
                 continue;
             }
-            var prefab = tilePrefabs[Random.Range(0, tilePrefabs.Count)];
+            var prefab = stage01.innerTilePrefab[Random.Range(0, stage01.innerTilePrefab.Length)];
             if (!mapTilePool.ContainsKey(prefab.name))
             {
                 mapTilePool[prefab.name] = new List<GameObject>();
@@ -185,7 +180,7 @@ public class MapManager : MonoBehaviour
         }
         for (int i = 0; i < (mapSize - 2) * (mapSize - 2); i++)
         {
-            var prefab = tilePrefabs[Random.Range(0, tilePrefabs.Count)];
+            var prefab = stage01.innerTilePrefab[Random.Range(0, stage01.innerTilePrefab.Length)];
             //생성할 타일 종류의 pool리스트가 존재하는지 확인
             if (!mapTilePool.ContainsKey(prefab.name))
             {

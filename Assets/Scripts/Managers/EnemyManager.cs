@@ -9,12 +9,11 @@ public class EnemyManager : MonoBehaviour
 {
     //addressable로부터 preload한 프리팹 관리
     public static EnemyManager Instance { get; private set; }
-    private Dictionary<string, GameObject> prefabCache;
-    private List<GameObject> enemyPrefabs;
     private List<GameObject> deadPtcPool = new List<GameObject>();
-
+    private List<GameObject> hitPtcPool = new List<GameObject>();
+    [SerializeField]private EnemyConfig drone;
     private int spawnEnemyNum;
-    private int enemyCount;
+    private int remainEnemyCount;
     private int killEnemyCount;
     private void Awake()
     {
@@ -28,47 +27,23 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         spawnEnemyNum = 10;
-        enemyCount = 0;
+        remainEnemyCount = 0;
         killEnemyCount = 0;
+
     }
     //오브젝트 관리
-    public void InstanceEnemyDeadPtc(Vector3 pos)
-    {
-        GameObject reusable = deadPtcPool.Find(t => t != null && !t.activeInHierarchy);
-        if (reusable != null)
-        {
-            reusable.transform.position = pos;
-            reusable.SetActive(true);
-        }
-        else
-        {
-            Addressables.InstantiateAsync("EnemyDeadPtc").Completed += handle =>
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    var it = handle.Result;
-                    it.transform.position = pos;
-                    deadPtcPool.Add(it);
-                }
-            };
-        }
-    }
 
-public void SetInitializedPrefab()
-{
-    prefabCache = AssetManager.Instance.GetPrefabCache();
-    enemyPrefabs = AssetManager.Instance.GetLabelCache("Enemy");
-}
-public IEnumerator Spawn()
+    public IEnumerator Spawn()
     {
+
         for (int i = 0; i < spawnEnemyNum; i++)
         {
             yield return new WaitForSeconds(0.5f);
             SpawnEnemy();
-            AddEnemyCount();
+            AddremainEnemyCount();
             yield return new WaitForSeconds(6f);
         }
-        if (GetEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
+        if (GetremainEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
     }
 
     //Enemy 풀링
@@ -88,17 +63,46 @@ public IEnumerator Spawn()
             enemyPool[poolName].Add(instance);
         }
     }
+    public void InstanceEnemyDeadPtc(Vector3 pos)
+    {
+        GameObject reusable = deadPtcPool.Find(t => t != null && !t.activeInHierarchy);
+        if (reusable != null)
+        {
+            reusable.transform.position = pos;
+            reusable.SetActive(true);
+        }
+        else
+        {
+            var deadPtc = Instantiate(drone.enemyDeadPtc);
+            deadPtc.transform.position = pos;
+
+        }
+    }
+    public void InstanceHitPtc(Vector3 hitPos)
+    {
+        GameObject reusable = hitPtcPool.Find(t => t != null && !t.activeInHierarchy);
+        if (reusable != null)
+        {
+            reusable.transform.position = hitPos;
+            reusable.SetActive(true);
+        }
+        else
+        {
+            var hitPtc = Instantiate(drone.enemyHitPtc);
+            hitPtc.transform.position = hitPos;
+        }
+    }
     public void SpawnEnemy()
     {
         //드론 오브젝트 선택
 
-        if (enemyPrefabs == null || enemyPrefabs.Count == 0)
+        if (drone.enemyPrefab == null || drone.enemyPrefab.Length == 0)
         {
             Debug.LogError("No map tiles found with label 'MapTile'");
             return;
         }
 
-        GameObject rndEnemy= enemyPrefabs[Random.Range(0, enemyPrefabs.Count)]; 
+        GameObject rndEnemy= drone.enemyPrefab[Random.Range(0, drone.enemyPrefab.Length)]; 
 
         //드론 소환할 위치
 
@@ -133,7 +137,7 @@ public IEnumerator Spawn()
             reusable = Instantiate(rndEnemy, rndEnemySpawnPointPos, Quaternion.identity);
             enemyPool[rndEnemy.name].Add(reusable);
 
-            var spawnPtc = Instantiate(prefabCache["EnemySpawnPtc"]);
+            var spawnPtc = Instantiate(drone.enemySpawnPtc);
             SetInstance(spawnPtc, Vector3.zero, Quaternion.identity, reusable.transform);
         }
     }
@@ -142,22 +146,23 @@ public IEnumerator Spawn()
     {
         spawnEnemyNum += num; 
     }
-    public int GetEnemyCount()
+    public int GetremainEnemyCount()
     {
-        return enemyCount;
+        return remainEnemyCount;
     }
     public int GetkillEnemyCount()
     {
         return killEnemyCount;
     }
-    public void AddEnemyCount(int num = 1)
+    public void AddremainEnemyCount(int num = 1)
     {
-        enemyCount += num;
+        remainEnemyCount += num;
     }
     public void DeadEnemy()
     {
-        enemyCount -= 1;
+        remainEnemyCount -= 1;
         killEnemyCount += 1;
+
 
     }
 }
