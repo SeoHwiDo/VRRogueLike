@@ -51,7 +51,6 @@ public class UIManager : MonoBehaviour
         //startUI?.SetActive(false);
         inGameUI?.SetActive(true);
     }
-
     public void HideAllUI()
     {
         //startUI?.SetActive(false);
@@ -78,9 +77,12 @@ public class UIManager : MonoBehaviour
     {
         skillInspector.fillAmount = skill;
     }
-    public void UpdateStatUI(int level, int enemyCount)
+    public void UpdateLevelUI(int level)
     {
         levelText.text = "Level: " + level;
+    }
+    public void UpdateEnemyCountTextUI(int enemyCount)
+    {
         enemyCountText.text = "Enemies: " + enemyCount;
     }
     public void UpdateBulletUI(int max,int cnt)

@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     {
         MapManager.Instance.SetMapConfig(6, 12); //맵 수정 필요한 경우
         StartCoroutine(InitGameSequence());
+        UIManager.Instance.UpdateLevelUI(level);
     }
     void Update()
     {
