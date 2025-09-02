@@ -102,26 +102,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Ptc
-  - m_GUID: 8b3f676fe7b41044495a2964396b8ba3
-    m_Address: DroneDeadSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sound
-  - m_GUID: 6dd7024f00606b44eb5884197a66a893
-    m_Address: FireSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sound
-  - m_GUID: e483a773e1b8c924e82e6ba189b556eb
-    m_Address: DroneMoveSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sound
-  - m_GUID: 4e20c982f8860ee46bae2ac740fbcb9e
-    m_Address: DroneSpawnSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Sound
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:
