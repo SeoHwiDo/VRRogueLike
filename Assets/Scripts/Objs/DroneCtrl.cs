@@ -19,10 +19,7 @@ public class DroneCtrl : MonoBehaviour
     [SerializeField] private float damage;
     private Coroutine hpHideCoroutine;
 
-    //드론 파티클
-    //private GameObject deadPtc;
-    //private GameObject spawnPtc;
-    private List<GameObject> hitPtcPool=new List<GameObject>();
+    
 
 
     private GameObject player;
@@ -43,17 +40,11 @@ public class DroneCtrl : MonoBehaviour
     private bool droneHPbarEnd = true;
     private bool goingUp = true;
     private bool isDead = false;
-    //public void InitializePtc(GameObject _spawnPtc, GameObject _deadPtc)
-    //{
-    //    spawnPtc = _spawnPtc;
-    //    deadPtc = _deadPtc;
-    //}
+    
     void Awake()
     {
         // 해당 오브젝트의 오디오컴포넌트 호출
         audioSource = this.GetComponent<AudioSource>();
-        droneMoveSound = Resources.Load<AudioClip>("Sounds/DroneMoveSound");
-        //droneDeadSound = Resources.Load<AudioClip>("Sounds/droneDeadSound");
     }
 
     void OnEnable()
@@ -76,7 +67,7 @@ public class DroneCtrl : MonoBehaviour
         if (audioSource != null && droneMoveSound != null)
         {
             audioSource.loop = true;
-            audioSource.clip = droneMoveSound;
+            //audioSource.clip = droneMoveSound;
             audioSource.Play();
         }
 
@@ -160,28 +151,7 @@ public class DroneCtrl : MonoBehaviour
         }
     }
     
-    private void InstanceHitPtc(Vector3 hitPos)
-    {
-        GameObject reusable = hitPtcPool.Find(t => t != null && !t.activeInHierarchy);
-        if (reusable != null)
-        {   
-            reusable.transform.position = hitPos;
-            reusable.SetActive(true);
-        }
-        else
-        {
-            Addressables.InstantiateAsync("HitPtc").Completed += handle =>
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    var it = handle.Result;
-                    it.transform.SetParent(this.transform, false);
-                    it.transform.position = hitPos;
-                    hitPtcPool.Add(it);
-                }
-            };
-        }
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -205,7 +175,7 @@ public class DroneCtrl : MonoBehaviour
         if (other.gameObject.CompareTag("bullet"))
         {
             Debug.Log("hit "+other.gameObject.name);
-            InstanceHitPtc(other.gameObject.transform.position);
+            EnemyManager.Instance.InstanceHitPtc(other.gameObject.transform.position);
             ShowHPBar();
             loseHP(GameManager.Instance.GetBulletDamage());
         }

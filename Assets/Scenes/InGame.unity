@@ -141,9 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a813d88b7b02cc40be9a08e4e98a7b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnPoint: {fileID: 4970021408955130537, guid: 606508a750df9e048877db88747b715a,
-    type: 3}
   stage01: {fileID: 11400000, guid: 4aa9fb8c1ce62f24ead94a650dd4910c, type: 2}
+  commonMapPrefab: {fileID: 11400000, guid: c01ce92b988aa3046a3c14ed35c50fcd, type: 2}
 --- !u!4 &85771273
 Transform:
   m_ObjectHideFlags: 0
@@ -519,7 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1705104434}
   MaxHP: 10
-  bulletSpeed: 10
+  bulletSpeed: 100
   bulletDamage: 1
   bulletMax: 25
   level: 1
