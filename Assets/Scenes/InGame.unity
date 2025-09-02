@@ -141,6 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a813d88b7b02cc40be9a08e4e98a7b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySpawnPoint: {fileID: 4970021408955130537, guid: 606508a750df9e048877db88747b715a,
+    type: 3}
+  stage01: {fileID: 11400000, guid: 4aa9fb8c1ce62f24ead94a650dd4910c, type: 2}
 --- !u!4 &85771273
 Transform:
   m_ObjectHideFlags: 0
@@ -226,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4018c07a86ee8d943a21a91417b97bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drone: {fileID: 11400000, guid: 35968f4b790593f42b544d9455084100, type: 2}
 --- !u!4 &555927409
 Transform:
   m_ObjectHideFlags: 0
@@ -602,6 +606,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8244592329704018973, guid: 12eef755df016b142bf8eb3669cea348,
+        type: 3}
+      propertyPath: m_Name
+      value: Level
+      objectReference: {fileID: 0}
     - target: {fileID: 8244592330163241366, guid: 12eef755df016b142bf8eb3669cea348,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -766,6 +775,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8244592330423967900, guid: 12eef755df016b142bf8eb3669cea348,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyCount
       objectReference: {fileID: 0}
     - target: {fileID: 8244592330498970317, guid: 12eef755df016b142bf8eb3669cea348,
         type: 3}

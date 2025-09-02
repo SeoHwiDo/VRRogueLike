@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - MapTile
   - m_GUID: 606508a750df9e048877db88747b715a
-    m_Address: DroneSpawnPoint
+    m_Address: EnemySpawnPoint
     m_ReadOnly: 0
     m_SerializedLabels:
     - Map
@@ -82,31 +82,46 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
-  - m_GUID: 2be6dc851bf09934f949232acced76f3
-    m_Address: Drone_Move
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Etc
   - m_GUID: f9a3cdb4bfa8ec44687c0505e2ebc08a
     m_Address: HpBar
     m_ReadOnly: 0
     m_SerializedLabels:
     - UI
   - m_GUID: c681867400497e54d83434a5efac2bad
-    m_Address: EnemyDeadPtc
+    m_Address: DroneDeadPtc
     m_ReadOnly: 0
     m_SerializedLabels:
     - Ptc
   - m_GUID: 96730f8640590934eacb6f860058e7f9
-    m_Address: EnemySpawnPtc
+    m_Address: DroneSpawnPtc
     m_ReadOnly: 0
     m_SerializedLabels:
     - Ptc
   - m_GUID: 0ed3aa0ad0ea90d4c8bc8240d451b1ce
-    m_Address: HitPtc
+    m_Address: DroneHitPtc
     m_ReadOnly: 0
     m_SerializedLabels:
     - Ptc
+  - m_GUID: 8b3f676fe7b41044495a2964396b8ba3
+    m_Address: DroneDeadSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+  - m_GUID: 6dd7024f00606b44eb5884197a66a893
+    m_Address: FireSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+  - m_GUID: e483a773e1b8c924e82e6ba189b556eb
+    m_Address: DroneMoveSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
+  - m_GUID: 4e20c982f8860ee46bae2ac740fbcb9e
+    m_Address: DroneSpawnSound
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sound
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:
