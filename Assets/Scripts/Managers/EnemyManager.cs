@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using static UnityEditor.PlayerSettings;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class EnemyManager : MonoBehaviour
         spawnEnemyNum = 10;
         remainEnemyCount = 0;
         killEnemyCount = 0;
+        UIManager.Instance.UpdateEnemyCountTextUI(remainEnemyCount, spawnEnemyNum);
 
     }
     //오브젝트 관리
@@ -162,6 +164,7 @@ public class EnemyManager : MonoBehaviour
     {
         remainEnemyCount -= 1;
         killEnemyCount += 1;
+        UIManager.Instance.UpdateEnemyCountTextUI(remainEnemyCount, spawnEnemyNum);
 
 
     }

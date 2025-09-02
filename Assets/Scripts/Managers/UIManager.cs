@@ -81,9 +81,9 @@ public class UIManager : MonoBehaviour
     {
         levelText.text = "Level: " + level;
     }
-    public void UpdateEnemyCountTextUI(int enemyCount)
+    public void UpdateEnemyCountTextUI(int remainEnemyCount,int SpawnEnemyNum)
     {
-        enemyCountText.text = "Enemies: " + enemyCount;
+        enemyCountText.text = "Enemies: " + remainEnemyCount + "/"+SpawnEnemyNum;
     }
     public void UpdateBulletUI(int max,int cnt)
     {
