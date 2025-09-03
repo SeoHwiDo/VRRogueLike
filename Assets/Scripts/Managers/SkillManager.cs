@@ -111,17 +111,17 @@ public class SkillManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / tempBulletReloadTime;
-            UIManager.Instance.UpdateReloadGaze(progress); // UIManager에 UI 업데이트 요청
+            UIManager.Instance.UpdateReloadGaze(progress);
             yield return null;
         }
         tempBullet = GameManager.Instance.GetBulletMax();
+        UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(), tempBullet);
         if (bulletReloading) bulletReloading = false;
     }
     public void ReloadBullet()
     {
         bulletReloading=true;
         StartCoroutine(ReloadTimerGaze());
-        UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(), tempBullet);
     }
     private void BulletMaxUp()
     {
