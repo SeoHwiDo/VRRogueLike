@@ -31,7 +31,7 @@ public class CtrlManager : MonoBehaviour
     void Update()
     {
         Vector2 lookDelta = InputManager.Instance.GetLookAxis();
-        if (InputManager.Instance.GetFireKey())
+        if (InputManager.Instance.GetFireKey()&&!SkillManager.Instance.IsBulletReloading())
         {
             SkillManager.Instance.StartShooting();
         }

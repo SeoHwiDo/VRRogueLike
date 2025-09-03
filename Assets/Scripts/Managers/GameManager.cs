@@ -32,12 +32,14 @@ public class GameManager : MonoBehaviour
     {
         return bulletSpeed;
     }
+
     public float GetBulletSize()
     {
         return bulletSize;
     }
+    public float GetBulletReloadTime()
     {
-        bulletSpeed = speed;
+        return bulletReloadTime;
     }
     public void AddBulletMax(int max)
     {

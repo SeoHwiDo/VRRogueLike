@@ -10,9 +10,10 @@ public class SkillManager : MonoBehaviour
     //[SerializeField]private AudioClip fireSound;
     [SerializeField]private GameObject bullet;
     [SerializeField]private GameObject firePtc;
-    private float bulletSize;
     private float tempBulletSize;
     private int tempBullet;
+    private float tempBulletReloadTime;
+    private bool bulletReloading;
     private Vector3 bulletLegacySize;
     private int shootCnt;
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
@@ -31,7 +32,8 @@ public class SkillManager : MonoBehaviour
     }
     private void Start()
     {
-        
+        bulletReloading = false;
+        tempBulletReloadTime = GameManager.Instance.GetBulletReloadSize();
         shootCnt = 1;
         audioSource = GetComponent<AudioSource>();
         tempBulletSize = GameManager.Instance.GetBulletSize();
@@ -39,6 +41,13 @@ public class SkillManager : MonoBehaviour
         tempBullet = GameManager.Instance.GetBulletMax();
         UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(), tempBullet);
 
+    }
+    private void Update()
+    {
+        if (tempBullet <= 0)
+        {
+            ReloadBullet();
+        }
     }
     private void PoolingObj(Queue<GameObject> pool,GameObject obj)
     {
@@ -94,6 +103,26 @@ public class SkillManager : MonoBehaviour
     {
         StartCoroutine(ShootRoutine());
     }
+    private IEnumerator ReloadTimerGaze()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < tempBulletReloadTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / tempBulletReloadTime;
+            UIManager.Instance.UpdateReloadGaze(progress); // UIManager에 UI 업데이트 요청
+            yield return null;
+        }
+        tempBullet = GameManager.Instance.GetBulletMax();
+        if (bulletReloading) bulletReloading = false;
+    }
+    public void ReloadBullet()
+    {
+        bulletReloading=true;
+        StartCoroutine(ReloadTimerGaze());
+        UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(), tempBullet);
+    }
     private void BulletMaxUp()
     {
         GameManager.Instance.AddBulletMax(25);
@@ -106,5 +135,8 @@ public class SkillManager : MonoBehaviour
     {
         shootCnt++;
     }
-
+    public bool IsBulletReloading()
+    {
+        return bulletReloading;
+    }
 }

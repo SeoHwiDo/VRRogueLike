@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private TMP_Text enemyCountText;
     [SerializeField] private TMP_Text BulletText;
+    [SerializeField] private Image ReloadGaze;
+
 
 
 
@@ -87,10 +89,15 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateBulletUI(int max,int cnt)
     {
-
         BulletText.text = cnt + "/" + max;
     }
-
+    public void UpdateReloadGaze(float progress)
+    {
+        if (ReloadGaze != null)
+        {
+            ReloadGaze.fillAmount = progress;
+        }
+    }
     public void ShowGameOverUI(bool isWin)
     {
         gameOverUI.SetActive(true);
