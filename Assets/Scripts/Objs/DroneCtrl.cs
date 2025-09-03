@@ -16,7 +16,7 @@ public class DroneCtrl : MonoBehaviour
     //드론의 체력 바 
     [SerializeField]private Image hpGauge;
     [SerializeField]private Canvas enemyHP;
-    [SerializeField] private float damage;
+    private float damage=1f;
     private Coroutine hpHideCoroutine;
 
     
