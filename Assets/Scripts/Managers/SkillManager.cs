@@ -33,7 +33,7 @@ public class SkillManager : MonoBehaviour
     private void Start()
     {
         bulletReloading = false;
-        tempBulletReloadTime = GameManager.Instance.GetBulletReloadSize();
+        tempBulletReloadTime = GameManager.Instance.GetBulletReloadTime();
         shootCnt = 1;
         audioSource = GetComponent<AudioSource>();
         tempBulletSize = GameManager.Instance.GetBulletSize();

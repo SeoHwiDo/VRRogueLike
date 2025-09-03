@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private float bulletSpeed = 10f;
     [SerializeField]private float bulletDamage = 1f;
     [SerializeField]private float bulletSize = 1f;
-    [SerializeField] private float bulletReloadSize = 3f;
+    [SerializeField] private float bulletReloadTime = 3f;
     [SerializeField]private int bulletMax = 25;
 
     [Header("Game State")]
