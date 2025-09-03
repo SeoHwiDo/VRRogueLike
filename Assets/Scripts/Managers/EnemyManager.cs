@@ -30,7 +30,7 @@ public class EnemyManager : MonoBehaviour
         spawnEnemyNum = 10;
         remainEnemyCount = 0;
         killEnemyCount = 0;
-        UIManager.Instance.UpdateEnemyCountTextUI(remainEnemyCount, spawnEnemyNum);
+        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, spawnEnemyNum);
 
     }
     //오브젝트 관리
@@ -42,7 +42,6 @@ public class EnemyManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
             SpawnEnemy();
-            AddremainEnemyCount();
             yield return new WaitForSeconds(6f);
         }
         if (GetremainEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
@@ -162,9 +161,8 @@ public class EnemyManager : MonoBehaviour
     }
     public void DeadEnemy()
     {
-        remainEnemyCount -= 1;
         killEnemyCount += 1;
-        UIManager.Instance.UpdateEnemyCountTextUI(remainEnemyCount, spawnEnemyNum);
+        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, spawnEnemyNum);
 
 
     }

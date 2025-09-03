@@ -11,6 +11,8 @@ public class SkillManager : MonoBehaviour
     [SerializeField]private GameObject bullet;
     [SerializeField]private GameObject firePtc;
     private float bulletSize;
+    private float tempBulletSize;
+    private int tempBullet;
     private Vector3 bulletLegacySize;
     private int shootCnt;
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
@@ -30,10 +32,12 @@ public class SkillManager : MonoBehaviour
     private void Start()
     {
         
+        shootCnt = 1;
         audioSource = GetComponent<AudioSource>();
-        shootCnt = 3;
-        bulletSize = 1f;
+        tempBulletSize = GameManager.Instance.GetBulletSize();
         bulletLegacySize=bullet.transform.localScale;
+        tempBullet = GameManager.Instance.GetBulletMax();
+        UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(), tempBullet);
 
     }
     private void PoolingObj(Queue<GameObject> pool,GameObject obj)
@@ -44,12 +48,12 @@ public class SkillManager : MonoBehaviour
             reusable.transform.position = this.transform.position;
             reusable.transform.rotation = this.transform.rotation;
             reusable.SetActive(true);
-            reusable.transform.localScale = bulletLegacySize*bulletSize;
+            reusable.transform.localScale = bulletLegacySize* tempBulletSize;
         }
         else
         {
             GameObject newBullet = Instantiate(obj, this.transform.position, this.transform.rotation);
-            newBullet.transform.localScale = bulletLegacySize*bulletSize;
+            newBullet.transform.localScale = bulletLegacySize* tempBulletSize;
         }
     }
     public void InPool(GameObject obj)
@@ -70,6 +74,8 @@ public class SkillManager : MonoBehaviour
     private void ShootBullet()
     {
         //audioSource.PlayOneShot(fireSound);
+        tempBullet--;
+        UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(),tempBullet);
         PoolingObj(firePtcPool, firePtc);
         PoolingObj(bulletPool, bullet);
     }
@@ -94,7 +100,7 @@ public class SkillManager : MonoBehaviour
     }
     private void BulletSizeUp()
     {
-        bulletSize *= 2f;
+        tempBulletSize *= 2f;
     }
     private void BulletDoubleShot()
     {

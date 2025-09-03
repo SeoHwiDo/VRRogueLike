@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private float MaxHP = 10;
     [SerializeField]private float bulletSpeed = 10f;
     [SerializeField]private float bulletDamage = 1f;
+    [SerializeField]private float bulletSize = 1f;
+    [SerializeField] private float bulletReloadSize = 3f;
     [SerializeField]private int bulletMax = 25;
 
     [Header("Game State")]
@@ -30,13 +32,20 @@ public class GameManager : MonoBehaviour
     {
         return bulletSpeed;
     }
-    public void SetBulletSpeed(float speed)
+    public float GetBulletSize()
+    {
+        return bulletSize;
+    }
     {
         bulletSpeed = speed;
     }
     public void AddBulletMax(int max)
     {
         bulletMax += max;
+    }
+    public int GetBulletMax()
+    {
+        return bulletMax;
     }
 
 
@@ -68,6 +77,7 @@ public class GameManager : MonoBehaviour
         //{
         //    MapManager.Instance.refreshMap();
         //}
+
         
     }
     public void EnterSelectSkill()

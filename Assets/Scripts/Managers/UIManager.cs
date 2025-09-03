@@ -88,6 +88,7 @@ public class UIManager : MonoBehaviour
     public void UpdateBulletUI(int max,int cnt)
     {
 
+        BulletText.text = cnt + "/" + max;
     }
 
     public void ShowGameOverUI(bool isWin)
