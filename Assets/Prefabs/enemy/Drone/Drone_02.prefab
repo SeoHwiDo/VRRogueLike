@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpGauge: {fileID: 4614297511968693831}
   enemyHP: {fileID: 3534795747325466563}
-  damage: 0
+  damage: 1
 --- !u!82 &82203279578107926
 AudioSource:
   m_ObjectHideFlags: 0
