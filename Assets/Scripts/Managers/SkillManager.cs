@@ -7,17 +7,25 @@ public class SkillManager : MonoBehaviour
     public static SkillManager Instance {  get; private set; }
     private AudioSource audioSource;
 
-    //[SerializeField]private AudioClip fireSound;
+    private Queue<GameObject> bulletPool = new Queue<GameObject>();
+    private Queue<GameObject> firePtcPool = new Queue<GameObject>();
+
     [SerializeField]private GameObject bullet;
     [SerializeField]private GameObject firePtc;
+
     private float tempBulletSize;
+    private Vector3 bulletLegacySize;
     private int tempBullet;
     private float tempBulletReloadTime;
     private bool bulletReloading;
-    private Vector3 bulletLegacySize;
+
+    private float skillReloadTime;
+    private bool skillReloading;
+
+  
+
     private int shootCnt;
-    private Queue<GameObject> bulletPool = new Queue<GameObject>();
-    private Queue<GameObject> firePtcPool = new Queue<GameObject>();
+
     private void Awake()
     {
         if (Instance == null)
@@ -34,6 +42,10 @@ public class SkillManager : MonoBehaviour
     {
         bulletReloading = false;
         tempBulletReloadTime = GameManager.Instance.GetBulletReloadTime();
+
+        skillReloading = false;
+        skillReloadTime = 1f;
+
         shootCnt = 1;
         audioSource = GetComponent<AudioSource>();
         tempBulletSize = GameManager.Instance.GetBulletSize();
@@ -92,10 +104,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < shootCnt; i++)
         {
-            // 1. 먼저 한 발을 발사합니다.
             ShootBullet();
-
-            // 2. 다음 발사를 위해 0.1초 동안 대기합니다.
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -103,7 +112,7 @@ public class SkillManager : MonoBehaviour
     {
         StartCoroutine(ShootRoutine());
     }
-    private IEnumerator ReloadTimerGaze()
+    private IEnumerator ReloadBulletTimerGaze()
     {
         float elapsedTime = 0f;
 
@@ -120,9 +129,28 @@ public class SkillManager : MonoBehaviour
     }
     public void ReloadBullet()
     {
-        bulletReloading=true;
-        StartCoroutine(ReloadTimerGaze());
+        bulletReloading = true;
+        StartCoroutine(ReloadBulletTimerGaze());
     }
+    private IEnumerator ReloadSkillTimerGaze()
+    {
+        float elapsedTime = skillReloadTime;
+
+        while (elapsedTime > 0)
+        {
+            elapsedTime -= Time.deltaTime;
+            float progress = elapsedTime / skillReloadTime;
+            UIManager.Instance.UpdateSkillUI(progress);
+            yield return null;
+        }
+        if (skillReloading) skillReloading = false;
+    }
+    public void ReloadSkill()
+    {
+        skillReloading = true;
+        StartCoroutine(ReloadSkillTimerGaze());
+    }
+   
     private void BulletMaxUp()
     {
         GameManager.Instance.AddBulletMax(25);
@@ -138,5 +166,9 @@ public class SkillManager : MonoBehaviour
     public bool IsBulletReloading()
     {
         return bulletReloading;
+    }
+    public bool IsSkillReloading()
+    {
+        return skillReloading;
     }
 }
