@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text resultText;
 
     [Header("System UI")]
+    [SerializeField] private GameObject CautionUI;
     [SerializeField] private TMP_Text CautionText;
 
     [SerializeField] private GameObject inGameUI;
@@ -103,10 +104,16 @@ public class UIManager : MonoBehaviour
         gameOverUI.SetActive(true);
         resultText.text = EnemyManager.Instance.GetkillEnemyCount().ToString();
     }
-    public void ShowCautionText(string message)
+    public void ShowCaution(string message, float time)
+    {
+        StartCoroutine(ShowCautionText(message, time));
+    }
+    public IEnumerator ShowCautionText(string message,float time)
     {
         CautionText.text = message;
-        CautionText.gameObject.SetActive(true);
+        CautionUI.SetActive(true);
+        yield return new WaitForSeconds(time);
+        CautionUI.SetActive(false);
     }
     public void HideCautionText()
     {
