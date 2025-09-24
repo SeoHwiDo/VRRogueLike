@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-   public static PlayerManager Instance { get; private set; }
+    public static PlayerManager Instance { get; private set; }
     private List<GameObject> atkEnemy = new List<GameObject>();
     private float HP;
 
@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void LosePlayerHP(float dmg)
     {
-        HP -= dmg;
+        HP = ((HP-dmg)>=0)?HP-dmg:0 ;
     }
     public List<GameObject> getatkEnemy()
     {
