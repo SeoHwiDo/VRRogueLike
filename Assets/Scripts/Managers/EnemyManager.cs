@@ -44,7 +44,7 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemy();
             yield return new WaitForSeconds(6f);
         }
-        if (GetremainEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
+        //if (GetremainEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
     }
 
     //Enemy 풀링
