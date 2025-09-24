@@ -1295,8 +1295,8 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 581482923}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1705104442
-BoxCollider:
+--- !u!136 &1705104441
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1305,9 +1305,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2.5, z: 2}
-  m_Center: {x: 0, y: 0.25, z: 0}
+  m_Radius: 1.5
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1739388702 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8244592328769197876, guid: 12eef755df016b142bf8eb3669cea348,
