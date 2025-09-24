@@ -26,10 +26,12 @@ public class DroneCtrl : MonoBehaviour
     //드론의 이동 속도
     private float moveSpeed =2.0f;
     private float tempMoveSpeed;
+    private Coroutine goFowardCorutine;
+    private Coroutine GoRightCoroutine;
     //드론의 부유 모션 파라미터
     private float upDownSpeed = 1.0f;
+    private Coroutine upDownCoroutine;
     private float timer = 0f;
-    private float moveTime = 1.0f;
     //드론의 기본 체력 설정
     private float maxHP = 5f;
     private float HP;
@@ -70,9 +72,8 @@ public class DroneCtrl : MonoBehaviour
             //audioSource.clip = droneMoveSound;
             audioSource.Play();
         }
-
         // 부유 모션 코루틴 시작
-        StartCoroutine(DroneUpDown());
+        StartUpDown(upDownSpeed);
     }
     // Update is called once per frame
     void Update()
@@ -86,7 +87,7 @@ public class DroneCtrl : MonoBehaviour
         if (player != null)
         {
             this.transform.LookAt(player.transform);
-            this.transform.position += this.transform.forward * tempMoveSpeed * Time.deltaTime;
+            
         }
     }
     void OnDisable()
@@ -94,6 +95,7 @@ public class DroneCtrl : MonoBehaviour
         // 모든 코루틴을 중지시켜서, 비활성화된 상태에서 불필요한 연산을 막습니다.
         StopAllCoroutines();
         hpHideCoroutine = null; // 코루틴 참조도 초기화
+        upDownCoroutine = null;
     }
     private void OnDead()
     {
@@ -113,7 +115,6 @@ public class DroneCtrl : MonoBehaviour
 
     private void ShowHPBar(){
         //코루틴 실행시 체력바 플로팅
-        Debug.Log("start ShowHPBar");
         enemyHP.enabled = true;
         if (hpHideCoroutine != null)
         {
@@ -121,63 +122,120 @@ public class DroneCtrl : MonoBehaviour
         }
         hpHideCoroutine = StartCoroutine(HideHPBar());
     }
+    void StartUpDown(float _upDownSpeed)
+    {
+        upDownCoroutine = StartCoroutine(UpDown(_upDownSpeed));
+    }
+    void StopUpDown()
+    {
+        if (upDownCoroutine != null)
+        {
+            StopCoroutine(upDownCoroutine);
+        }
+    }
+    void StartGoFoward(float _moveSpeed, Vector3 dir)
+    {
+        goFowardCorutine=StartCoroutine(GoFoward(_moveSpeed, dir));
+    }
+    void StopGoFoward()
+    {
+        StopCoroutine(goFowardCorutine);
+    }
+    void GoingRight()
+    {
+        GoRightCoroutine = StartCoroutine(GoRight());
+        while (GoRightCoroutine != null)
+        {
+            StopCoroutine(GoRightCoroutine);
+        }
+    }
     private IEnumerator HideHPBar()
     {
         yield return new WaitForSeconds(3f);
         enemyHP.enabled = false;
         hpHideCoroutine = null; // 끝난 후 null로 초기화
     }
-    void MoveUpdown()
-    {
-        //타이머를 통해 일정 시간마다 상하운동 반복
-        timer += Time.deltaTime;
-        if (goingUp){
-            transform.position += transform.up * upDownSpeed * Time.deltaTime;
-            if (timer>=moveTime) goingUp = false;
-        }
-        else{
-            transform.position -= transform.up * upDownSpeed * Time.deltaTime;
-            if (timer >= moveTime * 2.0f){
-                goingUp = true;
-                timer = 0;
-            }
-        }
-    }
     //기능과 코루틴 분리
-    IEnumerator DroneUpDown(){
-        while (!isDead){
-            MoveUpdown();
-             yield return null;  // 한 프레임 대기 (없으면 무한 루프 됨)
+    IEnumerator UpDown(float _upDownSpeed){
+        while (true){
+            timer += Time.deltaTime;
+            if (goingUp)
+            {
+                transform.position += transform.up * _upDownSpeed * Time.deltaTime;
+                if (timer >= _upDownSpeed) goingUp = false;
+            }
+            else
+            {
+                transform.position -= transform.up * _upDownSpeed * Time.deltaTime;
+                if (timer >= _upDownSpeed * 2.0f)
+                {
+                    goingUp = true;
+                    timer = 0;
+                }
+            }
+            yield return null;  // 한 프레임 대기 (없으면 무한 루프 됨)
         }
     }
-    
-    
+    IEnumerator GoFoward(float _moveSpeed, Vector3 dir)
+    {
+        while (true)
+        {
+            this.transform.position += dir * _moveSpeed * Time.deltaTime;
+            yield return null;
+        }
+    }
+    IEnumerator GoRight()
+    {
+        yield return new WaitForSeconds(3f);
+        GoRightCoroutine = null;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             //처음 타격한 드론일떄 타격한 드론 배열에 추가
             List<GameObject> atkPlayerEnemy = PlayerManager.Instance.getatkEnemy();
-            if (!atkPlayerEnemy.Contains(other.gameObject))
+            if (!atkPlayerEnemy.Contains(this.gameObject))
             {
-                atkPlayerEnemy.Add(other.gameObject);
+                atkPlayerEnemy.Add(this.gameObject);
                 PlayerManager.Instance.LosePlayerHP(damage);
                 UIManager.Instance.UpdateHPUI(PlayerManager.Instance.GetPlayerHP());
                 //진동 피드백
                 Handheld.Vibrate();
                 //체력 감소
                 //if (!gunFire.godMode) 
-                
+
             }
             //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
-            tempMoveSpeed = 0;
+            if (!hit_player)
+            {
+                tempMoveSpeed = 0;
+                this.GetComponent<Rigidbody>().isKinematic = true;
+                StopUpDown();
+                StartUpDown(0.5f);
+                hit_player = true;
+            }
         }
         if (other.gameObject.CompareTag("bullet"))
         {
-            Debug.Log("hit "+other.gameObject.name);
             EnemyManager.Instance.InstanceHitPtc(other.gameObject.transform.position);
             ShowHPBar();
             loseHP(GameManager.Instance.GetBulletDamage());
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            //드론이 뒤로 밀려나면 다시 전진
+            if (hit_player)
+            {
+                tempMoveSpeed = moveSpeed;
+                this.GetComponent<Rigidbody>().isKinematic = false;
+                StopUpDown();
+                StartUpDown(upDownSpeed);
+                hit_player = false;
+            }
         }
     }
 }
