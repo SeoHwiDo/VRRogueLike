@@ -99,6 +99,11 @@ public class MapManager : MonoBehaviour
         map.transform.position = Vector3.zero;
         //타일 위치 지정을 위한 오프셋
         float offset = ((mapSize - 1) / 2f) * tileSize;
+        if (mapSize <= 2)
+        {
+            Debug.Log("mapSize는 최소 2를 넘어야 합니다. 임의로 3으로 설정합니다");
+            mapSize = 3;
+        }
 
         //코너타일 생성
         for (int i = 0; i < 4; i++)
