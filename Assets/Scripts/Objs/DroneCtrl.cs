@@ -57,7 +57,7 @@ public class DroneCtrl : MonoBehaviour
         tempMoveSpeed = moveSpeed;
         hpGauge.fillAmount = 1f; // UI도 초기화
         enemyHP.enabled = false; // 체력바는 숨긴 상태로 시작
-
+        hit_player = false;
         // 싱글톤 인스턴스는 OnEnable에서 찾는 것이 더 안전
         if (GameManager.Instance != null)
         {
@@ -74,6 +74,7 @@ public class DroneCtrl : MonoBehaviour
         }
         // 부유 모션 코루틴 시작
         StartUpDown(upDownSpeed);
+        StartGoFoward(moveSpeed);
     }
     // Update is called once per frame
     void Update()
@@ -111,6 +112,7 @@ public class DroneCtrl : MonoBehaviour
 
         this.HP -= dmg;
         hpGauge.fillAmount = HP / maxHP;
+        ShowHPBar();
     }
 
     private void ShowHPBar(){
@@ -133,9 +135,9 @@ public class DroneCtrl : MonoBehaviour
             StopCoroutine(upDownCoroutine);
         }
     }
-    void StartGoFoward(float _moveSpeed, Vector3 dir)
+    void StartGoFoward(float _moveSpeed)
     {
-        goFowardCorutine=StartCoroutine(GoFoward(_moveSpeed, dir));
+        goFowardCorutine=StartCoroutine(GoFoward(_moveSpeed));
     }
     void StopGoFoward()
     {
@@ -176,11 +178,11 @@ public class DroneCtrl : MonoBehaviour
             yield return null;  // 한 프레임 대기 (없으면 무한 루프 됨)
         }
     }
-    IEnumerator GoFoward(float _moveSpeed, Vector3 dir)
+    IEnumerator GoFoward(float _moveSpeed)
     {
         while (true)
         {
-            this.transform.position += dir * _moveSpeed * Time.deltaTime;
+            this.transform.position += transform.forward * _moveSpeed * Time.deltaTime;
             yield return null;
         }
     }
@@ -209,7 +211,8 @@ public class DroneCtrl : MonoBehaviour
             //드론의 이동속도를 0으로 바꿔 계속하여 전진하는것 방지
             if (!hit_player)
             {
-                tempMoveSpeed = 0;
+                //tempMoveSpeed = 0;
+                StopGoFoward();
                 this.GetComponent<Rigidbody>().isKinematic = true;
                 StopUpDown();
                 StartUpDown(0.5f);
@@ -219,7 +222,7 @@ public class DroneCtrl : MonoBehaviour
         if (other.gameObject.CompareTag("bullet"))
         {
             EnemyManager.Instance.InstanceHitPtc(other.gameObject.transform.position);
-            ShowHPBar();
+            
             loseHP(GameManager.Instance.GetBulletDamage());
         }
     }
@@ -230,7 +233,8 @@ public class DroneCtrl : MonoBehaviour
             //드론이 뒤로 밀려나면 다시 전진
             if (hit_player)
             {
-                tempMoveSpeed = moveSpeed;
+                //tempMoveSpeed = moveSpeed;
+                StartGoFoward(moveSpeed);
                 this.GetComponent<Rigidbody>().isKinematic = false;
                 StopUpDown();
                 StartUpDown(upDownSpeed);
