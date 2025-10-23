@@ -56,7 +56,9 @@ public class GameManager : MonoBehaviour
         MapManager.Instance.GenerateMap();
         player.transform.position = MapManager.Instance.GetPlayerStartPosition();
         StartCoroutine(EnemyManager.Instance.Spawn());
-        
+        UIManager.Instance.ShowInGameUI();
+
+
     }
     void Awake()
     {
