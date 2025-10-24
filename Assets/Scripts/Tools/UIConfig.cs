@@ -28,8 +28,10 @@ public class UIConfig : MonoBehaviour
     public TMP_Text CautionText;
 
     [Header("UI")]
-    public GameObject CautionUI;
     public GameObject inGameUI;
+    public GameObject CautionUI;
+    public GameObject playerStatusTop;
+    public GameObject playerStatusBot;
     public GameObject gameOverUI;
 
 }

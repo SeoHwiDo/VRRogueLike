@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]private int bulletMax = 25;
 
     [Header("Game State")]
+    private bool selectSkillTime=false;
     [SerializeField] private int level = 1;
     [SerializeField] private int maxLevel = 4;
     [SerializeField] private bool isGameOver = false;
@@ -49,13 +50,24 @@ public class GameManager : MonoBehaviour
     {
         return bulletMax;
     }
-
-
+    private void GameLevelUp()
+    {
+        if (level <= maxLevel) level += 1;
+    }
+    public bool GetSelectSkillTime()
+    {
+        return selectSkillTime;
+    }
+    public void SetSelectSkillTime(bool isSelectTime)
+    {
+        selectSkillTime = isSelectTime;
+    }
     private void InitGameSequence()
     {
         MapManager.Instance.GenerateMap();
         player.transform.position = MapManager.Instance.GetPlayerStartPosition();
-        StartCoroutine(EnemyManager.Instance.Spawn());
+        EnterSelectSkill();
+        
         UIManager.Instance.ShowInGameUI();
 
 
@@ -77,20 +89,62 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    MapManager.Instance.refreshMap();
-        //}
+        if (EnemyManager.Instance.GetRemainEnemyCount() <= 0 && !selectSkillTime)
+        {
+            EnterSelectSkill();
+        }
 
-        
+        // 2. 스킬 선택 시간 동안 입력 처리 로직 실행
+        if (selectSkillTime)
+        {
+            HandleSkillSelectionInput();
+        }
+
     }
+    private void HandleSkillSelectionInput()
+    {
+        // SkillManager에게 클릭된 스킬 카드가 있는지 확인을 요청합니다.
+        GameObject selectedCard = SkillManager.Instance.CheckSelectedSkillCard();
+
+        if (selectedCard != null)
+        {
+            // 스킬 카드가 성공적으로 클릭되었을 경우
+            string methodName = selectedCard.name; // 오브젝트 이름 == 메서드 이름
+
+            // 1. 스킬 적용 (SkillManager의 델리게이트 호출)
+            bool skillApplied = SkillManager.Instance.InvokeSkillByName(methodName);
+
+            if (skillApplied)
+            {
+                // 2. 획득한 스킬을 보유 목록에 추가
+                SkillManager.Instance.AddSkillToHasSkills(methodName, selectedCard); // SkillManager에 이 메서드를 추가해야 함
+
+                // 3. 스킬 선택 모드 종료 (게임 재개)
+                OutSelectSkill();
+
+                // 4. 다음 레벨 적 스폰 시작
+                StartCoroutine(EnemyManager.Instance.Spawn());
+            }
+            else
+            {
+                Debug.LogError($"[GameManager] 스킬 '{methodName}' 적용 실패.");
+            }
+        }
+    }
+
     public void EnterSelectSkill()
     {
-        Time.timeScale = 0;
+        selectSkillTime = true;
+        GameLevelUp();
+        SkillManager.Instance.MakeSkillCard(); // makeSkill -> MakeSkillCard로 이름 변경 가정
+        GameManager.Instance.player.GetComponent<BoxCollider>().enabled = false;
     }
     public void OutSelectSkill()
     {
-        Time.timeScale = 1;
+        selectSkillTime = false;
+        // 획득되지 않은 나머지 스킬 카드 파괴/비활성화 로직 추가
+        GameManager.Instance.player.GetComponent<BoxCollider>().enabled = true;
+        UIManager.Instance.UpdateLevelUI(level);
     }
-    
+
 }

@@ -13,7 +13,7 @@ public class EnemyManager : MonoBehaviour
     private List<GameObject> deadPtcPool = new List<GameObject>();
     private List<GameObject> hitPtcPool = new List<GameObject>();
     [SerializeField]private EnemyConfig drone;
-    private int spawnEnemyNum;
+    private int tmpSpawnEnemyNum;
     private int remainEnemyCount;
     private int killEnemyCount;
     private void Awake()
@@ -27,10 +27,10 @@ public class EnemyManager : MonoBehaviour
     }
     void Start()
     {
-        spawnEnemyNum = 10;
-        remainEnemyCount = 0;
+        tmpSpawnEnemyNum = 10;
+        remainEnemyCount = tmpSpawnEnemyNum;
         killEnemyCount = 0;
-        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, spawnEnemyNum);
+        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, tmpSpawnEnemyNum);
 
     }
     //오브젝트 관리
@@ -38,13 +38,12 @@ public class EnemyManager : MonoBehaviour
     public IEnumerator Spawn()
     {
 
-        for (int i = 0; i < spawnEnemyNum; i++)
+        for (int i = 0; i < tmpSpawnEnemyNum; i++)
         {
             yield return new WaitForSeconds(0.5f);
             SpawnEnemy();
             yield return new WaitForSeconds(6f);
         }
-        //if (GetremainEnemyCount() == 0) GameManager.Instance.EnterSelectSkill();
     }
 
     //Enemy 풀링
@@ -145,9 +144,9 @@ public class EnemyManager : MonoBehaviour
     //enemySystem 관리
     public void AddSpawnEnemyNum(int num)
     {
-        spawnEnemyNum += num; 
+        tmpSpawnEnemyNum += num; 
     }
-    public int GetremainEnemyCount()
+    public int GetRemainEnemyCount()
     {
         return remainEnemyCount;
     }
@@ -162,7 +161,8 @@ public class EnemyManager : MonoBehaviour
     public void DeadEnemy()
     {
         killEnemyCount += 1;
-        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, spawnEnemyNum);
+        remainEnemyCount -= 1;
+        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, tmpSpawnEnemyNum);
 
 
     }

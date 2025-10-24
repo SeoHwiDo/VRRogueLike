@@ -52,19 +52,14 @@ public class UIManager : MonoBehaviour
         //startUI?.SetActive(false);
         tmpUI.inGameUI?.SetActive(false);
     }
-    public void UpdateCursorUI(bool SkillSelect)
+    public void UpdateSkillSelectUI(bool enterSkillSelect)
     {
-        if (SkillSelect)
-        {
-            tmpUI.skillCursor.gameObject.SetActive(true);
-            tmpUI.bulletCursor.gameObject.SetActive(false);
-        }
-        else
-        {
-            tmpUI.skillCursor.gameObject.SetActive(false);
-            tmpUI.bulletCursor.gameObject.SetActive(true);
-        }
+        tmpUI.playerStatusTop.SetActive(!enterSkillSelect);
+        tmpUI.playerStatusBot.SetActive(!enterSkillSelect);
+        tmpUI.skillCursor.gameObject.SetActive(enterSkillSelect);
+        tmpUI.bulletCursor.gameObject.SetActive(!enterSkillSelect);
     }
+
     public void UpdateHPUI(float hp)
     {
         tmpUI.hpGauge.fillAmount = hp / GameManager.Instance.GetPlayerMaxHP();

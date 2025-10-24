@@ -45,6 +45,7 @@ public class CtrlManager : MonoBehaviour
         // 발사 버튼을 눌렀을 때
         if (InputManager.Instance.GetFireKeyDown())
         {
+
             //스킬 쿨타임이 아닐때 게이지 충전
             if (!SkillManager.Instance.IsSkillReloading())
             {
@@ -72,7 +73,7 @@ public class CtrlManager : MonoBehaviour
             }
     
         }
-        if (InputManager.Instance.GetFireKeyUp())
+        if (!GameManager.Instance.GetSelectSkillTime()&&InputManager.Instance.GetFireKeyUp())
         {
             if (isCharging)
             {
@@ -89,5 +90,6 @@ public class CtrlManager : MonoBehaviour
 
             }
         }
+       
     }
 }

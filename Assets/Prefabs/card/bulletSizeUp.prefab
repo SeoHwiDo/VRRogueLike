@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4636653922102121136}
   - component: {fileID: 2778289434162274215}
   - component: {fileID: 3713988206607690827}
+  - component: {fileID: 114436251366086976}
   m_Layer: 0
   m_Name: bulletSizeUp
   m_TagString: card
@@ -92,6 +93,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114436251366086976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343198265395331700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c0dcc032b5ed44f97d2145893cfbf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPassive: 0
+  SkillName: 
 --- !u!1 &8455924415339266275
 GameObject:
   m_ObjectHideFlags: 0
