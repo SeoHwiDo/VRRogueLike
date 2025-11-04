@@ -90,6 +90,7 @@ public class EnemyManager : MonoBehaviour
         {
             var hitPtc = Instantiate(drone.enemyHitPtc);
             hitPtc.transform.position = hitPos;
+            hitPtcPool.Add(hitPtc);
         }
     }
     public void SpawnEnemy()
