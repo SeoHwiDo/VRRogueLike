@@ -42,6 +42,7 @@ public class SkillManager : MonoBehaviour
             InitializeSkillActions();
             InitializeSkillCardInstance();
             skillNames = skillActions.Keys.ToList();
+            maxSkillNum = 3;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -56,7 +57,7 @@ public class SkillManager : MonoBehaviour
 
         skillReloading = false;
         skillReloadTime = 1f;
-        maxSkillNum = 3;
+        
         shootCnt = 1;
         audioSource = GetComponent<AudioSource>();
         tempBulletSize = GameManager.Instance.GetBulletSize();
@@ -167,7 +168,7 @@ public class SkillManager : MonoBehaviour
         if (Physics.Raycast(this.transform.position, forward, out hit))
         {
             // 디버깅: Raycast가 무언가를 감지했는지 확인
-            Debug.Log($"[SkillManager] Raycast 감지: {hit.transform.gameObject.name}");
+            //Debug.Log($"[SkillManager] Raycast 감지: {hit.transform.gameObject.name}");
 
             // 2. 입력(클릭) 확인
             if (InputManager.Instance.GetFireKeyDown())
@@ -229,26 +230,28 @@ public class SkillManager : MonoBehaviour
         }
 
         int randomIndex = Random.Range(0, skillNames.Count);
+
         string randomSkillName = skillNames[randomIndex];
         return randomSkillName;
     }
-    public void MakeSkillCard()
+    public Dictionary<string, GameObject> MakeSkillCard()
     {
-        UIManager.Instance.UpdateSkillSelectUI(true);
-        
+        Debug.Log("MakeSkillCard 호출");
         //생성할 스킬 리스트 
         Dictionary<string,GameObject> selectedSkillNames = new Dictionary<string, GameObject>();
         for (int i = 0; i < maxSkillNum; i++)
         {
             string skillName = GetRandomSkillName();
+            Debug.Log("호출된 스킬:"+skillName);
             Vector3 cardSpawnPos = GameManager.Instance.player.transform.position;
             //랜덤으로 호출한 카드가 중복으로 호출되었거나 이미 보유중인 스킬일때
-            if (hasSkills.ContainsKey(skillName) || selectedSkillNames.ContainsKey(skillName))
-            {
-                //다시 선택
-                i--;
-                continue;
-            }
+            //if (hasSkills.ContainsKey(skillName) || selectedSkillNames.ContainsKey(skillName))
+            //{
+            //    //다시 선택
+            //    Debug.Log("중복, 재 선택");
+            //    i--;
+            //    continue;
+            //}
             //카드의 스폰 위치 지정
             cardSpawnPos.x += -2 + 2 * i;
             cardSpawnPos.y += 1;
@@ -258,7 +261,15 @@ public class SkillManager : MonoBehaviour
             //해당 카드 이름을 스킬카드 이름과 같게 변경
             selectedSkillNames[skillName].name = skillName;
             //스킬카드를 보기 편하게 플레이어를 바라보도록 설정
-            selectedSkillNames[skillName].transform.LookAt(GameManager.Instance.player.transform);
+            selectedSkillNames[skillName].transform.LookAt(new Vector3(GameManager.Instance.player.transform.position.x,1, GameManager.Instance.player.transform.position.z));
+        }
+        return selectedSkillNames;
+    }
+    public void DelSkillCard(Dictionary<string, GameObject> dict)
+    {
+        foreach(var d in dict.Keys.ToList())
+        {
+            dict[d].SetActive(false);
         }
     }
     public void AddSkillToHasSkills(string skillName, GameObject cardInstance)

@@ -1285,7 +1285,7 @@ MonoBehaviour:
   bulletSize: 1
   bulletReloadTime: 3
   bulletMax: 25
-  level: 1
+  level: 0
   maxLevel: 4
   isGameOver: 0
 --- !u!4 &799308657

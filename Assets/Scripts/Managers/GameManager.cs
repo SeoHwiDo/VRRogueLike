@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Game State")]
     private bool selectSkillTime=false;
-    [SerializeField] private int level = 1;
+    [SerializeField] private int level = 0;
     [SerializeField] private int maxLevel = 4;
     [SerializeField] private bool isGameOver = false;
     public float GetPlayerMaxHP()
@@ -131,20 +131,27 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    Dictionary<string,GameObject> skillCardList;
     public void EnterSelectSkill()
     {
         selectSkillTime = true;
         GameLevelUp();
-        SkillManager.Instance.MakeSkillCard(); // makeSkill -> MakeSkillCard로 이름 변경 가정
+        UIManager.Instance.UpdateSkillSelectUI(true);
+
+        MapManager.Instance.skillSelectMap();
+        skillCardList=SkillManager.Instance.MakeSkillCard();
         GameManager.Instance.player.GetComponent<BoxCollider>().enabled = false;
     }
     public void OutSelectSkill()
     {
         selectSkillTime = false;
+        SkillManager.Instance.DelSkillCard(skillCardList);
+        UIManager.Instance.UpdateSkillSelectUI(false);
+
         // 획득되지 않은 나머지 스킬 카드 파괴/비활성화 로직 추가
         GameManager.Instance.player.GetComponent<BoxCollider>().enabled = true;
         UIManager.Instance.UpdateLevelUI(level);
+        MapManager.Instance.refreshMap();
     }
 
 }

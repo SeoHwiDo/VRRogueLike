@@ -206,6 +206,39 @@ public class MapManager : MonoBehaviour
             }
         }
     }
+    public void skillSelectMap()
+    {
+        //맵 초기화
+        foreach (var mapTileAddr in mapTilePool)
+        {
+            foreach (var mapTile in mapTileAddr.Value)
+            {
+                mapTile.SetActive(false);
+            }
+        }
+        for (int i = 0; i < (mapSize - 2) * (mapSize - 2); i++)
+        {
+            var prefab = stage01.innerTilePrefab[0];
+            //생성할 타일 종류의 pool리스트가 존재하는지 확인
+            if (!mapTilePool.ContainsKey(prefab.name))
+            {
+                mapTilePool[prefab.name] = new List<GameObject>();
+            }
+            GameObject reusable = mapTilePool[prefab.name].Find(t => t != null && !t.activeInHierarchy);
+            if (reusable != null)
+            {
+                //타일 재활용이 가능한 경우
+                reusable.transform.position = mapInnerTransform[i];
+                reusable.SetActive(true);
+            }
+            else
+            {
+                //타일 재활용이 불가능한 경우 새로 소환 후 pool에 등록
+                GameObject inner_Map_Tile = Instantiate(prefab);
+                SetInstance(inner_Map_Tile, mapInnerTransform[i], Quaternion.identity, map.transform, $"_{i}", prefab.name);
+            }
+        }
+    }
 
 }
 #if UNITY_EDITOR
