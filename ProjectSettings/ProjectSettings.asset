@@ -728,10 +728,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 4d2d1b6a-6065-4eb4-acc0-b2aa04898be6
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: VRRougeLike
+  organizationId: baeksa
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

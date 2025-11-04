@@ -102,6 +102,51 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Ptc
+  - m_GUID: e64681c098894fb4bb4e1f07dcfde52a
+    m_Address: GodMode
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: c3c41bb3d97f23a4cbcef8779f18ea9a
+    m_Address: BulletDoubleShot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: 5964cda4ec418d84ea916e087377a936
+    m_Address: BulletInfinite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: 92362926dbbc7c841843a3230ff17aba
+    m_Address: bulletPowerUp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: fd85f377e9ca3a74cb84ac7b5a11dee0
+    m_Address: Assets/Prefabs/card/TimeSlow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: 095894f754bdb2146ab77177ace96853
+    m_Address: BulletMaxUp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: a53904f851882f74690a871a39301c59
+    m_Address: OneHP
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: 7f51336a810a6c64cb72af3ba4ccaf40
+    m_Address: AllDirShot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
+  - m_GUID: 46bdf42e54f3a1e44bfff5d2afbb10b4
+    m_Address: BulletSizeUp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Card
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7750e39dcd1eb9b43bc0e7b49794ccbb, type: 2}
   m_SchemaSet:

@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 public class AssetManager : MonoBehaviour
 {
     public static AssetManager Instance {  get; private set; }
-    [SerializeField] private string[] labels = { "Map","MapTile", "Player", "Enemy",  "Ptc" };
+    [SerializeField] private string[] labels = { "Map","MapTile", "Player", "Enemy",  "Ptc", "Card" };
 
     private readonly Dictionary<string,GameObject> prefabCache = new Dictionary<string,GameObject>();
     private readonly Dictionary<string, List<GameObject>> labelCache = new Dictionary<string, List<GameObject>>();

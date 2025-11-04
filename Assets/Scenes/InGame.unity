@@ -1949,6 +1949,7 @@ MonoBehaviour:
   - Etc
   - Ptc
   - MapTile
+  - Card
 --- !u!4 &1246154934
 Transform:
   m_ObjectHideFlags: 0
