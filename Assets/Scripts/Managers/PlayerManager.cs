@@ -42,7 +42,12 @@ public class PlayerManager : MonoBehaviour
     }
     public void removeAtkEnemy(GameObject enemyObj)
     {
-        atkEnemy.Remove(enemyObj);
+        if (enemyObj == null) return;
+        // atkEnemy가 List<GameObject> 또는 ICollection이라 가정
+        if (atkEnemy != null && atkEnemy.Contains(enemyObj))
+        {
+            atkEnemy.Remove(enemyObj);
+        }
     }
 
 
