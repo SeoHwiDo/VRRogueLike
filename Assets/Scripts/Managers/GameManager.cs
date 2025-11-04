@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    Dictionary<string,GameObject> skillCardList;
+    List<GameObject> skillCardList;
     public void EnterSelectSkill()
     {
         selectSkillTime = true;

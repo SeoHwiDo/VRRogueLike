@@ -9,15 +9,20 @@ public class SkillManager : MonoBehaviour
 
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     private Queue<GameObject> firePtcPool = new Queue<GameObject>();
+
+    //랜덤 스킬선택을 위한 스킬명단
+    private List<string> skillNames;
     //스킬명-실제스킬함수 매치 명단
     private Dictionary<string, System.Action> skillActions = new Dictionary<string, System.Action>();
-    //스킬명-실제스킬카드오브젝트 매치 명단
-    
+    //스킬명-실제스킬카드 오브젝트 매치 명단
     private Dictionary<string, GameObject> skillCardInstances = new Dictionary<string, GameObject>();
+
     //현재 플레이어가 소유중인 스킬들
-    private Dictionary<string, GameObject> hasSkills = new Dictionary<string, GameObject>();
-    //랜덤 스킬선택을 위한 스킬명 리스트
-    private List<string> skillNames;
+    private List<string> hasSkills = new List<string>();
+
+    //스킬카드 소환 풀
+    Dictionary<string, Queue<GameObject>> skillCardPool = new Dictionary<string, Queue<GameObject>>();
+
     [SerializeField]private List<GameObject> cardInstances = new List<GameObject>();
     [SerializeField]private GameObject bullet;
     [SerializeField]private GameObject firePtc;
@@ -74,20 +79,20 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private void PoolingObj(Queue<GameObject> pool,GameObject obj)
+    private GameObject PoolingObj(Queue<GameObject> pool, GameObject obj, Vector3 position, Quaternion rotation)
     {
-        if (pool.Count > 0)
+        if (pool != null && pool.Count > 0)
         {
             GameObject reusable = pool.Dequeue();
-            reusable.transform.position = this.transform.position;
-            reusable.transform.rotation = this.transform.rotation;
+            reusable.transform.position = position;
+            reusable.transform.rotation = rotation;
             reusable.SetActive(true);
-            reusable.transform.localScale = bulletLegacySize* tempBulletSize;
+            return reusable;
         }
         else
         {
-            GameObject newBullet = Instantiate(obj, this.transform.position, this.transform.rotation);
-            newBullet.transform.localScale = bulletLegacySize* tempBulletSize;
+            GameObject newObj = Instantiate(obj, position, rotation);
+            return newObj;
         }
     }
     public void InPool(GameObject obj)
@@ -100,6 +105,9 @@ public class SkillManager : MonoBehaviour
             case "ptc":
                 firePtcPool.Enqueue(obj);
                 return;
+            case "card":
+                skillCardPool[obj.name].Enqueue(obj);
+                return;
             default:
                 return;
         }
@@ -110,8 +118,9 @@ public class SkillManager : MonoBehaviour
         //audioSource.PlayOneShot(fireSound);
         tempBullet--;
         UIManager.Instance.UpdateBulletUI(GameManager.Instance.GetBulletMax(),tempBullet);
-        PoolingObj(firePtcPool, firePtc);
-        PoolingObj(bulletPool, bullet);
+        PoolingObj(firePtcPool, firePtc, this.transform.position, this.transform.rotation);
+        var _bullet=PoolingObj(bulletPool, bullet, this.transform.position, this.transform.rotation);
+        if( _bullet != null ) _bullet.transform.localScale = bulletLegacySize * tempBulletSize;
     }
     private IEnumerator ShootRoutine()
     {
@@ -234,53 +243,46 @@ public class SkillManager : MonoBehaviour
         string randomSkillName = skillNames[randomIndex];
         return randomSkillName;
     }
-    public Dictionary<string, GameObject> MakeSkillCard()
+    public List<GameObject> MakeSkillCard()
     {
         Debug.Log("MakeSkillCard 호출");
         //생성할 스킬 리스트 
-        Dictionary<string,GameObject> selectedSkillNames = new Dictionary<string, GameObject>();
+        List<GameObject> tmpSkillCard=new List<GameObject>();
         for (int i = 0; i < maxSkillNum; i++)
         {
             string skillName = GetRandomSkillName();
+            if (!skillCardPool.ContainsKey(skillName))
+            {
+                skillCardPool[skillName] = new Queue<GameObject>();
+            }
             Debug.Log("호출된 스킬:"+skillName);
-            Vector3 cardSpawnPos = GameManager.Instance.player.transform.position;
-            //랜덤으로 호출한 카드가 중복으로 호출되었거나 이미 보유중인 스킬일때
-            //if (hasSkills.ContainsKey(skillName) || selectedSkillNames.ContainsKey(skillName))
-            //{
-            //    //다시 선택
-            //    Debug.Log("중복, 재 선택");
-            //    i--;
-            //    continue;
-            //}
-            //카드의 스폰 위치 지정
+            Transform cardTransform= GameManager.Instance.player.transform;
+            Vector3 cardSpawnPos= cardTransform.position;
             cardSpawnPos.x += -2 + 2 * i;
             cardSpawnPos.y += 1;
             cardSpawnPos.z += 3;
-            //소환 후 스킬 카드 인스턴스 관리를 위한 배열에 삽입
-            selectedSkillNames.Add(skillName, Instantiate(skillCardInstances[skillName], cardSpawnPos, Quaternion.identity));
+            var _skillCard=PoolingObj(skillCardPool[skillName], skillCardInstances[skillName], cardSpawnPos, cardTransform.rotation);
             //해당 카드 이름을 스킬카드 이름과 같게 변경
-            selectedSkillNames[skillName].name = skillName;
+            _skillCard.name = skillName;
             //스킬카드를 보기 편하게 플레이어를 바라보도록 설정
-            selectedSkillNames[skillName].transform.LookAt(new Vector3(GameManager.Instance.player.transform.position.x,1, GameManager.Instance.player.transform.position.z));
+            _skillCard.transform.LookAt(new Vector3(GameManager.Instance.player.transform.position.x,1, GameManager.Instance.player.transform.position.z));
+            tmpSkillCard.Add(_skillCard);
         }
-        return selectedSkillNames;
+        return tmpSkillCard;
     }
-    public void DelSkillCard(Dictionary<string, GameObject> dict)
+    public void DelSkillCard(List<GameObject> cards)
     {
-        foreach(var d in dict.Keys.ToList())
+        foreach (var c in cards)
         {
-            dict[d].SetActive(false);
+            c.SetActive(false);
         }
     }
-    public void AddSkillToHasSkills(string skillName, GameObject cardInstance)
+    public void AddSkillToHasSkills(string skillName,GameObject skillCard)
     {
-        if (!hasSkills.ContainsKey(skillName))
-        {
             // 획득한 스킬 카드 인스턴스 자체를 hasSkills에 저장합니다.
-            hasSkills.Add(skillName, cardInstance);
+            hasSkills.Add(skillName);
+            InPool(skillCard);
 
-            // 획득하지 않은 나머지 카드를 파괴하는 로직도 여기서 처리할 수 있습니다.
-        }
     }
     private void InitializeSkillActions()
     {
@@ -311,6 +313,10 @@ public class SkillManager : MonoBehaviour
     private void BulletSizeUp()
     {
         tempBulletSize *= 2f;
+        foreach(var bp in bulletPool)
+        {
+            bp.transform.localScale = bulletLegacySize * tempBulletSize;
+        }
     }
     private void BulletDoubleShot()
     {
