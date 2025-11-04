@@ -93,10 +93,16 @@ public class DroneCtrl : MonoBehaviour
     }
     void OnDisable()
     {
-        // 모든 코루틴을 중지시켜서, 비활성화된 상태에서 불필요한 연산을 막습니다.
+        // 기존 정리 로직 유지
         StopAllCoroutines();
-        hpHideCoroutine = null; // 코루틴 참조도 초기화
+        hpHideCoroutine = null;
         upDownCoroutine = null;
+
+        // 플레이어의 atk 리스트에서 항상 제거 시도 (중복 호출에 안전함)
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.removeAtkEnemy(this.gameObject);
+        }
     }
     private void OnDead()
     {
@@ -104,6 +110,12 @@ public class DroneCtrl : MonoBehaviour
         isDead = true;
         EnemyManager.Instance.DeadEnemy();
         EnemyManager.Instance.InstanceEnemyDeadPtc(this.transform.position);
+
+        // PlayerManager에서 공격 대상 리스트에서 제거 (안전 체크)
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.removeAtkEnemy(this.gameObject);
+        }
 
         this.gameObject.SetActive(false);
     }
@@ -196,10 +208,10 @@ public class DroneCtrl : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             //처음 타격한 드론일떄 타격한 드론 배열에 추가
-            List<GameObject> atkPlayerEnemy = PlayerManager.Instance.getatkEnemy();
-            if (!atkPlayerEnemy.Contains(this.gameObject))
+            if (!PlayerManager.Instance.getatkEnemy().Contains(this.gameObject))
             {
-                atkPlayerEnemy.Add(this.gameObject);
+                //atkPlayerEnemy.Add(this.gameObject);
+                PlayerManager.Instance.addAtkEnemy(this.gameObject);
                 PlayerManager.Instance.LosePlayerHP(damage);
                 UIManager.Instance.UpdateHPUI(PlayerManager.Instance.GetPlayerHP());
                 //진동 피드백
