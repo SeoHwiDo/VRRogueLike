@@ -16,6 +16,7 @@ public class EnemyManager : MonoBehaviour
     private int tmpSpawnEnemyNum;
     private int remainEnemyCount;
     private int killEnemyCount;
+
     private void Awake()
     {
         if (Instance == null)
@@ -24,14 +25,6 @@ public class EnemyManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
-    }
-    void Start()
-    {
-        tmpSpawnEnemyNum = 10;
-        remainEnemyCount = tmpSpawnEnemyNum;
-        killEnemyCount = 0;
-        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, tmpSpawnEnemyNum);
-
     }
     //오브젝트 관리
 
@@ -143,9 +136,12 @@ public class EnemyManager : MonoBehaviour
         }
     }
     //enemySystem 관리
-    public void AddSpawnEnemyNum(int num)
+    public void SetEnemys(int level)
     {
-        tmpSpawnEnemyNum += num; 
+        tmpSpawnEnemyNum = GameManager.Instance.GetSpawnEnemyNum()+ level; 
+        remainEnemyCount = tmpSpawnEnemyNum;
+        killEnemyCount = 0;
+        UIManager.Instance.UpdateEnemyCountTextUI(killEnemyCount, tmpSpawnEnemyNum);
     }
     public int GetRemainEnemyCount()
     {
@@ -155,10 +151,7 @@ public class EnemyManager : MonoBehaviour
     {
         return killEnemyCount;
     }
-    public void AddremainEnemyCount(int num = 1)
-    {
-        remainEnemyCount += num;
-    }
+
     public void DeadEnemy()
     {
         killEnemyCount += 1;

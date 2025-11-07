@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int level = 0;
     [SerializeField] private int maxLevel = 4;
     [SerializeField] private bool isGameOver = false;
+    [SerializeField] private int SpawnEnemyNum = 1;
     public float GetPlayerMaxHP()
     {
         return MaxHP;
@@ -61,6 +62,10 @@ public class GameManager : MonoBehaviour
     public void SetSelectSkillTime(bool isSelectTime)
     {
         selectSkillTime = isSelectTime;
+    }
+    public int GetSpawnEnemyNum()
+    {
+        return SpawnEnemyNum;
     }
     private void InitGameSequence()
     {
@@ -137,7 +142,6 @@ public class GameManager : MonoBehaviour
         selectSkillTime = true;
         GameLevelUp();
         UIManager.Instance.UpdateSkillSelectUI(true);
-
         MapManager.Instance.skillSelectMap();
         skillCardList=SkillManager.Instance.MakeSkillCard();
         GameManager.Instance.player.GetComponent<BoxCollider>().enabled = false;
@@ -147,7 +151,7 @@ public class GameManager : MonoBehaviour
         selectSkillTime = false;
         SkillManager.Instance.DelSkillCard(skillCardList);
         UIManager.Instance.UpdateSkillSelectUI(false);
-
+        EnemyManager.Instance.SetEnemys(level);
         // 획득되지 않은 나머지 스킬 카드 파괴/비활성화 로직 추가
         GameManager.Instance.player.GetComponent<BoxCollider>().enabled = true;
         UIManager.Instance.UpdateLevelUI(level);
