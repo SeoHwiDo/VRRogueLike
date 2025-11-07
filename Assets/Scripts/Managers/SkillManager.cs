@@ -126,6 +126,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < shootCnt; i++)
         {
+            if(tempBullet<=0)break;
             ShootBullet();
             yield return new WaitForSeconds(0.1f);
         }
