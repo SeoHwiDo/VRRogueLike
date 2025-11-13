@@ -177,8 +177,6 @@ public class SkillManager : MonoBehaviour
         // 1. Raycast 실행
         if (Physics.Raycast(this.transform.position, forward, out hit))
         {
-            // 디버깅: Raycast가 무언가를 감지했는지 확인
-            //Debug.Log($"[SkillManager] Raycast 감지: {hit.transform.gameObject.name}");
 
             // 2. 입력(클릭) 확인
             if (InputManager.Instance.GetFireKeyDown())
@@ -187,24 +185,10 @@ public class SkillManager : MonoBehaviour
                 return hit.transform.gameObject;
             }
         }
-
         // 감지되지 않았거나 클릭이 없으면 null 반환
         return null;
     }
-    private void OnDrawGizmos()
-    {
-        // Raycast가 실행될 때와 동일한 변수를 사용하여 Gizmo를 그립니다.
-        Vector3 startPoint = this.transform.position;
-        Vector3 forwardDirection = this.transform.TransformDirection(Vector3.forward) * 1000;
 
-        // Gizmo 색상 설정
-        Gizmos.color = Color.red;
-
-        // Raycast 선 그리기
-        Gizmos.DrawLine(startPoint, startPoint + forwardDirection);
-
-        // Unity 에디터에서 Scene 뷰를 켜고, Gizmos 버튼이 활성화되어 있어야 보입니다.
-    }
     public bool InvokeSkillByName(string methodName)
     {
         // 1. 딕셔너리에 해당 이름의 Action이 등록되어 있는지 확인
@@ -260,7 +244,7 @@ public class SkillManager : MonoBehaviour
             Transform cardTransform= GameManager.Instance.player.transform;
             Vector3 cardSpawnPos= cardTransform.position;
             cardSpawnPos.x += -2 + 2 * i;
-            cardSpawnPos.y += 1;
+            cardSpawnPos.y = 1.5f;
             cardSpawnPos.z += 3;
             var _skillCard=PoolingObj(skillCardPool[skillName], skillCardInstances[skillName], cardSpawnPos, cardTransform.rotation);
             //해당 카드 이름을 스킬카드 이름과 같게 변경
@@ -330,5 +314,20 @@ public class SkillManager : MonoBehaviour
     public bool IsSkillReloading()
     {
         return skillReloading;
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Raycast가 실행될 때와 동일한 변수를 사용하여 Gizmo를 그립니다.
+        Vector3 startPoint = this.transform.position;
+        Vector3 forwardDirection = this.transform.TransformDirection(Vector3.forward) * 1000;
+
+        // Gizmo 색상 설정
+        Gizmos.color = Color.red;
+
+        // Raycast 선 그리기
+        Gizmos.DrawLine(startPoint, startPoint + forwardDirection);
+
+        // Unity 에디터에서 Scene 뷰를 켜고, Gizmos 버튼이 활성화되어 있어야 보입니다.
     }
 }
