@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 8207807487801361351}
   - component: {fileID: 8207807487801361350}
   m_Layer: 0
-  m_Name: GodMod
+  m_Name: GodMode
   m_TagString: card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

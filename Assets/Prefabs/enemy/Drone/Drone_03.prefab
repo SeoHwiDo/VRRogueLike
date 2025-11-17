@@ -80,6 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpGauge: {fileID: 6421832743467961473}
   enemyHP: {fileID: 2889542918850790661}
+  damage: 1
 --- !u!82 &82544563050195158
 AudioSource:
   m_ObjectHideFlags: 0
@@ -90,9 +91,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e483a773e1b8c924e82e6ba189b556eb, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.513
   m_Pitch: 1
   Loop: 1
   Mute: 0

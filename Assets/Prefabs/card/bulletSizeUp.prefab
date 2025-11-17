@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2778289434162274215}
   - component: {fileID: 3713988206607690827}
   m_Layer: 0
-  m_Name: bulletSizeUp
+  m_Name: BulletSizeUp
   m_TagString: card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

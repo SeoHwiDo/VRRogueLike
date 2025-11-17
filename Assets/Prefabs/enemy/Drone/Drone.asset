@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90da1aaeb3ddc842b4d0d9784aef436, type: 3}
   m_Name: Drone
   m_EditorClassIdentifier: 
-  enemy:
+  Name: Drone
+  enemyPrefab:
   - {fileID: 4924648907739753485, guid: 01a028bae9374e545b2405663e51dac3, type: 3}
   - {fileID: 8519692268483006889, guid: b2352fb70016a8542adfc37a626363ec, type: 3}
   - {fileID: 3827136372254072740, guid: 5423e47b7a1dd5641860a39ca7509c46, type: 3}
   - {fileID: 9055999050759660614, guid: d63282e774904234baa2748a3981d2a2, type: 3}
-  spawnPtc: {fileID: 1000011128802252, guid: 96730f8640590934eacb6f860058e7f9, type: 3}
-  deadPtc: {fileID: 8779782149406324045, guid: c681867400497e54d83434a5efac2bad, type: 3}
-  hitPtc: {fileID: 4998997037846836745, guid: 0ed3aa0ad0ea90d4c8bc8240d451b1ce, type: 3}
+  enemyDeadPtc: {fileID: 8779782149406324045, guid: c681867400497e54d83434a5efac2bad,
+    type: 3}
+  enemySpawnPtc: {fileID: 1000011128802252, guid: 96730f8640590934eacb6f860058e7f9,
+    type: 3}
+  enemyHitPtc: {fileID: 4998997037846836745, guid: 0ed3aa0ad0ea90d4c8bc8240d451b1ce,
+    type: 3}

@@ -20,8 +20,7 @@ public class InputManager : MonoBehaviour
     public float gamepadSensitivity = 100f;
     public float touchSensitivity = 0.1f;
 
-    private Vector2 lastTouchPos;
-    private bool isTouching;
+ 
 
     public Vector2 GetLookAxis()
     {
@@ -54,6 +53,8 @@ public class InputManager : MonoBehaviour
 
     private Vector2 GetTouchAxis()
     {
+        Vector2 lastTouchPos;
+        bool isTouching=false;
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
@@ -73,57 +74,95 @@ public class InputManager : MonoBehaviour
         }
         return Vector2.zero;
     }
-    public bool GetFireKey()
+    public bool GetFireKeyDown()
     {
         switch (inputType)
         {
             case InputType.Mouse:
-                return GetMouseFireKey();
+                return GetMouseFireKeyDown();
             case InputType.Gamepad:
-                return GetGamepadFireKey();
+                return GetGamepadFireKeyDown();
             case InputType.Touch:
-                return GetTouchFireKey();
+                return GetTouchFireKeyDown();
             default:
                 return false;
         }
     }
-    private bool GetMouseFireKey()
+
+    public bool GetFireKeyHeld()
     {
-        return Input.GetMouseButtonDown(0);
+        switch (inputType)
+        {
+            case InputType.Mouse:
+                return GetMouseFireKeyHeld();
+            case InputType.Gamepad:
+                return GetGamepadFireKeyHeld();
+            case InputType.Touch:
+                return GetTouchFireKeyHeld();
+            default:
+                return false;
+        }
     }
-    private bool GetGamepadFireKey()
+
+    public bool GetFireKeyUp()
+    {
+        switch (inputType)
+        {
+            case InputType.Mouse:
+                return GetMouseFireKeyUp();
+            case InputType.Gamepad:
+                return GetGamepadFireKeyUp();
+            case InputType.Touch:
+                return GetTouchFireKeyUp();
+            default:
+                return false;
+        }
+    }
+
+    //Mouse Fire
+    private bool GetMouseFireKeyDown() => Input.GetMouseButtonDown(0);
+    private bool GetMouseFireKeyHeld() => Input.GetMouseButton(0);
+    private bool GetMouseFireKeyUp() => Input.GetMouseButtonUp(0);
+
+    //Gamepad Fire
+    private bool GetGamepadFireKeyDown()
     {
 #if ENABLE_INPUT_SYSTEM
-        if (Gamepad.current != null)
-        {
-           return Gamepad.current.leftTrigger.wasPressedThisFrame;
-        }
+        return Gamepad.current?.leftTrigger.wasPressedThisFrame ?? false;
 #endif
         return false;
     }
-    private bool GetTouchFireKey()
+    private bool GetGamepadFireKeyHeld()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Gamepad.current?.leftTrigger.isPressed ?? false;
+#endif
+        return false;
+    }
+    private bool GetGamepadFireKeyUp()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Gamepad.current?.leftTrigger.wasReleasedThisFrame ?? false;
+#endif
+        return false;
+    }
+
+    //Touch Fire
+    private bool GetTouchFireKeyDown()
+    {
+        return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+    }
+    private bool GetTouchFireKeyHeld()
     {
         if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0);
-
-            // 터치 시작 → 게이지 충전 시작
-            if (touch.phase == TouchPhase.Began)
-            {
-                // TODO: 게이지 충전 시작
-            }
-            // 터치 유지 중 → 게이지 증가
-            else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
-            {
-                // TODO: 게이지 충전
-            }
-            // 터치 끝날 때 발사
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                // TODO: 게이지 충전 종료
-                return true;
-            }
+            var phase = Input.GetTouch(0).phase;
+            return phase == TouchPhase.Moved || phase == TouchPhase.Stationary;
         }
         return false;
+    }
+    private bool GetTouchFireKeyUp()
+    {
+        return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended;
     }
 }

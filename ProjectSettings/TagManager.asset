@@ -9,11 +9,11 @@ TagManager:
   - wall
   - spot
   - guard
-  - card
   - basic
   - hard
   - drone_ctrl
   - ptc
+  - Card
   layers:
   - Default
   - TransparentFX

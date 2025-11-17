@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 5376350495911690973}
   - component: {fileID: 5376350495911690972}
   m_Layer: 0
-  m_Name: bulletDoubleShot
+  m_Name: BulletDoubleShot
   m_TagString: card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

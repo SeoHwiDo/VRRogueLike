@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6569e15de66dd964ea97fae6fc6088e2, type: 3}
   m_Name: Stage01
   m_EditorClassIdentifier: 
-  corner: {fileID: 2121110233078948830, guid: acea88d7fe581544c9a31e76dbed3447, type: 3}
-  wall: {fileID: 8475795529181159517, guid: e9e63dd3873171849a3b8db4686e3370, type: 3}
-  door: {fileID: 1000456556999711064, guid: 4b140aa7d95eca04a9e7d4a515077645, type: 3}
-  innerTile:
+  Name: Stage01
+  cornerPrefab: {fileID: 2121110233078948830, guid: acea88d7fe581544c9a31e76dbed3447,
+    type: 3}
+  wallPrefab: {fileID: 8475795529181159517, guid: e9e63dd3873171849a3b8db4686e3370,
+    type: 3}
+  doorPrefab: {fileID: 1000456556999711064, guid: 4b140aa7d95eca04a9e7d4a515077645,
+    type: 3}
+  innerTilePrefab:
+  - {fileID: 3846870144030544660, guid: a209c401eb3a92a4f8e9049bc4c534b0, type: 3}
   - {fileID: 6114796071885476341, guid: 3e74e1453aa57f04f80f1cd298cdb8e6, type: 3}
   - {fileID: 3779295463972566679, guid: 6ac9ed3f802d3084490d5c43d3091a8f, type: 3}
   - {fileID: 6766077446817928419, guid: 225b068d6218b7647b370b06adfd399d, type: 3}

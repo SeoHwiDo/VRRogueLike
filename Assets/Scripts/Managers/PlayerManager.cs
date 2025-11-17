@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-   public static PlayerManager Instance { get; private set; }
+    public static PlayerManager Instance { get; private set; }
     private List<GameObject> atkEnemy = new List<GameObject>();
     private float HP;
 
@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void LosePlayerHP(float dmg)
     {
-        HP -= dmg;
+        HP = ((HP-dmg)>=0)?HP-dmg:0 ;
     }
     public List<GameObject> getatkEnemy()
     {
@@ -42,7 +42,12 @@ public class PlayerManager : MonoBehaviour
     }
     public void removeAtkEnemy(GameObject enemyObj)
     {
-        atkEnemy.Remove(enemyObj);
+        if (enemyObj == null) return;
+        // atkEnemy가 List<GameObject> 또는 ICollection이라 가정
+        if (atkEnemy != null && atkEnemy.Contains(enemyObj))
+        {
+            atkEnemy.Remove(enemyObj);
+        }
     }
 
 
