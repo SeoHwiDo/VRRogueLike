@@ -112,6 +112,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &70372146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4779880300920477082, guid: 12eef755df016b142bf8eb3669cea348,
+    type: 3}
+  m_PrefabInstance: {fileID: 969200270}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &85771271
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +411,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d666b4522780b34190ecfbdc61d1eca, type: 3}
+--- !u!1 &450830507 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8244592329802674713, guid: 12eef755df016b142bf8eb3669cea348,
+    type: 3}
+  m_PrefabInstance: {fileID: 969200270}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &533639729 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3115233096588928448, guid: 758043a040001ef4ea659df66dc7f03d,
@@ -1246,8 +1258,8 @@ MonoBehaviour:
   CautionText: {fileID: 8244592330016723736}
   inGameUI: {fileID: 8244592329724962065}
   CautionUI: {fileID: 8244592328949964876}
-  playerStatusTop: {fileID: 0}
-  playerStatusBot: {fileID: 0}
+  playerStatusTop: {fileID: 450830507}
+  playerStatusBot: {fileID: 70372146}
   gameOverUI: {fileID: 1863734012}
 --- !u!1 &799308655
 GameObject:
@@ -1288,6 +1300,7 @@ MonoBehaviour:
   level: 0
   maxLevel: 4
   isGameOver: 0
+  SpawnEnemyNum: 1
 --- !u!4 &799308657
 Transform:
   m_ObjectHideFlags: 0
@@ -2199,7 +2212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vrUI: {fileID: 2000972468}
   defaultUI: {fileID: 740447744}
-  isVR: 1
+  isVR: 0
 --- !u!1 &1863734012 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 340922115831385446, guid: 9d666b4522780b34190ecfbdc61d1eca,
